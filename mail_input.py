@@ -4,8 +4,8 @@ from email.mime.multipart import MIMEMultipart
 
 def send_mail(to, PW):
     # 送信に必要な情報を定数で定義
-    ID = input('メールアドレス: ')
-    PASS = input('パスワード: ')
+    ID = "numatakazuya.1234@gmail.com"
+    PASS = "yutakuma1334"
     HOST = "smtp.gmail.com"
     PORT = 587
     subject = "稟議書承認依頼"
