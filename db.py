@@ -212,4 +212,4 @@ def select_superier_mail(user_id):
     return superier_mail
 
 def comment_edit(id, comment):
-    
+    pass
