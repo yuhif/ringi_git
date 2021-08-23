@@ -15,8 +15,8 @@ def login_page():
     error = request.args.get("error")
     return render_template("login.html", error=error)
 
-@app.route("/top", methods=["POST"])  #トップページ
-def top_page():
+@app.route("/login", methods=["POST"])  #トップページ
+def login():
     mail = request.form.get("mail")
     pw = request.form.get("pw")
     result = db.login(mail, pw)
@@ -27,18 +27,34 @@ def top_page():
         session["auth"] = result[4]
         session.permanent = True
         app.permanent_session_lifetime = timedelta(minutes=30)
-        return render_template("")              #  ログイン成功したときのページ 
+        return redirect(url_for("top_page"))              #  トップページにリダイレクト 
     else:
         return redirect(url_for("login_page", error="パスワードかメールアドレスが違います。")) #失敗したとき
 
-@app.route("/auther_entry") #　管理者が登録するためのURL
-def auther_entry_page():
-    return render_template("", auth=1) # 管理者がパスワードを入力する画面を表示　authも持って行ってその後共通のアカウント登録画面に移動
+@app.route("/top") # トップページ
+def top_page():
+    error = request.args.get("error")
+    if "user" in session:
+        return render_template("main.html")
+    else:
+        return redirect(url_for("login_page", error="パスワードかメールアドレスが違います。")) #失敗したとき
 
-@app.route("/entry")   #　登録するためのページ
+
+@app.route("/auther_entry_page") #　管理者が登録するためのURL
+def auther_entry_page():
+    return render_template("kanrisha_account.html", auth=1) # 管理者がパスワードを入力する画面を表示　authも持って行ってその後共通のアカウント登録画面に移動
+
+@app.route("/entry", methods=["POST"])   #　登録するためのページ
 def entry():           # 上司のメールアドレスNULLもあり
-    auth = request.args.get("auth")
-    return render_template("", auth=auth)
+    auth = request.form.get("auth")
+    pw = request.form.get("pw")
+    if "user" in session:
+        return render_template("account2.html", auth=auth)
+    elif(pw == "admin"):
+        return render_template("account2.html", auth=auth)
+    else:
+        return redirect(url_for("login_page", error="パスワードが違います。")) #失敗したとき
+
 
 @app.route("/entry_confirm", methods=["POST"])   # アカウント登録時、入力内容確認画面の表示
 def entry_confirm():
@@ -48,9 +64,9 @@ def entry_confirm():
     superier_mail = request.form.get("superier_mail")
     department = request.form.get("department")
     auth = request.form.get("auth")
-    return render_template("", name=name, mail=mail, position=position, superier_mail=superier_mail, department=department, auth=auth)
+    return render_template("account_confirm.html", name=name, mail=mail, position=position, superier_mail=superier_mail, department=department, auth=auth)
 
-@app.route("/entry_complete") # アカウント登録完了画面の表示とDB更新とメール送信
+@app.route("/entry_complete", methods=["POST"]) # アカウント登録完了画面の表示とDB更新とメール送信
 def entry_complete():
     name = request.form.get("name")
     mail = request.form.get("mail")
@@ -60,15 +76,15 @@ def entry_complete():
     auth = request.form.get("auth")
     result = db.entry(name, mail, department, position, superier_mail, auth)
     if (result != "failure"):
-        # result = mail.(mail, result)  [result]にパスワードが入ってるから引数にしてメール処理に渡す
-        return render_template("")  # アカウント登録完了画面を表示する
+        result = mail_sample.send_mail(mail, result)  # [result]にパスワードが入ってるから引数にしてメール処理に渡す
+        return render_template("result.html")  # アカウント登録完了画面を表示する
     else:
         return redirect(url_for("login_page", error="アカウント登録に失敗")) # 失敗した時ログインページにエラー付きで飛ぶ
 
 @app.route("/show_document")
 def show_document():
     if "user" in session:
-        return render_template("", position="")    # 稟議書一覧を開くためのメニューを表示、役職で表示異なる  
+        return render_template("main2.html", position="")    # 稟議書一覧を開くためのメニューを表示、役職で表示異なる  
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -77,7 +93,7 @@ def show_document():
 @app.route("/show_account")
 def show_account():
     if "user" in session:
-        return render_template("", auth=session["auth"])    # アカウントのメニューを表示,authによって表示異なる
+        return render_template("main3.html", auth=session["auth"])    # アカウントのメニューを表示,authによって表示異なる
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -87,9 +103,9 @@ def show_delete_account():
         name = request.args.get("name")
         result = db.select_account(name)           # DBからアカウント一覧を取得する(名前の部分一致OR全部)
         if(result != "failure"):
-            return render_template("", result=result, error="")    # アカウントの一覧を表示(削除するアカウント)  
+            return render_template("account_kanri.html", result=result, error="")    # アカウントの一覧を表示(削除するアカウント)  
         else:
-            return render_template("", result="", error="sqlエラー")
+            return redirect(url_for("top_page", error="sqlエラー"))
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -156,7 +172,7 @@ def update_account_complete():
 @app.route("/my_account")
 def my_account():
     if "user" in session:  
-        return render_template("")    # 「アカウント情報」を押したときに表示される自分のアカウント情報のページ
+        return render_template("main4.html")    # 「アカウント情報」を押したときに表示される自分のアカウント情報のページ
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -286,7 +302,7 @@ def superier_approval_complete():
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
     
 @app.route("/superier_rejection_complete")  # 承認か否決を押す画面で否決を押したとき
-def superier_approval_complete():
+def superier_rejection_complete():
     if "user" in session:
         return render_template("")   # 否決完了画面を表示する
     else:
@@ -331,7 +347,7 @@ def approval_complete():
         if(superier_mail != "failure"):
             result = db.approval()  # approval_documentテーブルの承認者IDを更新してapprovalテーブルをインサートする
             if(result != "failure"):
-                #mail.input()   # 申請したと報告するメールを上司に送る
+                mail_input.send_mail(superier_mail)   # 申請したと報告するメールを上司に送る
                 return render_template("")   # 申請完了ページを表示する
             else:
                 return render_template("", error="申請に失敗しました") # エラー付きでメニューを表示する
@@ -343,10 +359,10 @@ def approval_complete():
 
 @app.route("/logout")
 def logout():
-    session.pop("id")
+    session.pop("user")
     session.pop("mail")
     session.pop("auth")
-    session.pop("position")
+    # session.pop("position")
     return redirect(url_for("login_page"))
 
 
