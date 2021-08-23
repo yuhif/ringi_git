@@ -12,9 +12,9 @@
     <div class="layout">
         <h1 class="title">稟議書申請システム</h1>
         <button class="button1">作成</button>
-        <button class="button2">一覧</button>
-        <button class="button3">アカウント</button>
-        <button class="button4">ログアウト</button>
+        <a href="{{url_for('show_document')}}"><button class="button2">一覧</button></a>
+        <a href="{{url_for('show_account')}}"><button class="button3">アカウント</button></a>
+        <a href="{{url_for('logout')}}"><button class="button4">ログアウト</button></a>
     </div>
 </body>
 </html>

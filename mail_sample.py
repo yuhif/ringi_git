@@ -6,8 +6,8 @@ from email.mime.multipart import MIMEMultipart
 # 引数は送信先、件名、本文
 def send_mail(to, PW):
     # 送信に必要な情報を定数で定義
-    ID = "numatakazuya.1234@gmail.com"
-    PASS = "yutakuma1334"
+    ID = "stesuto6@gmail.com"
+    PASS = "morijyobi567"
     HOST = "smtp.gmail.com"
     PORT = 587
     subject = "登録内容"
@@ -31,10 +31,3 @@ def send_mail(to, PW):
 
     server.quit()       # TLS通信終了
     print("メール送信完了！")
-
-if __name__ == "__main__":
-
-    # メール送信処理の呼び出し
-    send_mail(to="yuta0304fy@gmail.com", PW = "yuta0304fy")
-
-
