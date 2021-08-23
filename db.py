@@ -54,7 +54,7 @@ def login(mail, pw):
 def select_account(name):   # アカウントの一覧を取得する
     if(name != "null"):
         name = "%" + name + "%"
-        sql = ""        # nameを使った部分一致
+        sql = "SELECT * FROM account where name=%s;"        # nameを使った部分一致
     else:
         sql = "SELECT * FROM account;" # 引数nameが空の場合のsql
     conn = get_connection()
@@ -72,7 +72,7 @@ def select_account(name):   # アカウントの一覧を取得する
 def select_pw(id, pw):      # pw変更する時の処理。前のpwを取得する。
     conn = get_connection()
     cur = conn.cursor()
-    sql = ""
+    sql = "SELECT pw FROM user where user_id=%s;"
     try:
         cur.execute(sql,(id, ))
         result = cur.fetchone()
@@ -93,7 +93,7 @@ def select_pw(id, pw):      # pw変更する時の処理。前のpwを取得す�
 def update_pw(user_id, pw):
     conn = get_connection()
     cur = conn.cursor()
-    sql = ""        # pwのupdate文
+    sql = "update user set pw=%s;"        # pwのupdate文
     try:
         cur.execute()
     except Exception as e:
@@ -107,7 +107,7 @@ def update_pw(user_id, pw):
 def accout_update(id, name, mail, position, superier_mail, department):
     conn = get_connection()
     cur = conn.cursor()
-    sql = ""
+    sql = "update user set mail=(),name=(),position_id=(),superior_mail=(),department_id=() where user_id=();"
     try:
         cur.execute()
     except Exception as e:
@@ -120,9 +120,9 @@ def accout_update(id, name, mail, position, superier_mail, department):
     
 def select_my_document(user_id, status):
     if status == "null":
-        sql = ""  # 自分の稟議申請一覧を取ってくるsql(全部)
+        sql = "SELECT * FROM approval_document where user_id;"  # 自分の稟議申請一覧を取ってくるsql(全部)
     else:
-        sql = ""  # 自分の稟議申請一覧を取ってくるsql(statusでwhereをつかう)
+        sql = "SELECT * FROM approval_document where status;"  # 自分の稟議申請一覧を取ってくるsql(statusでwhereをつかう)
     conn = get_connection()
     cur = conn.cursor()
     try:
@@ -137,9 +137,9 @@ def select_my_document(user_id, status):
 
 def select_subordinate_document(mail, doc_name):
     if doc_name == "null":
-        sql = "" # 部下の稟議申請一覧を持ってくるsql（全部）
+        sql = "SELECT * FROM approval_document where superior_id=();" # 部下の稟議申請一覧を持ってくるsql（全部）（）内は自分のuser_id
     else:
-        sql = "" # 部下の稟議申請一覧を持ってくるsql（稟議書名・申請者名の部分一致)
+        sql = "SELECT * FROM approval_document where document_name like '%doc_name%'; " # 部下の稟議申請一覧を持ってくるsql（稟議書名・申請者名の部分一致)
     conn = get_connection()
     cur = conn.cursor()
     try:
@@ -154,9 +154,9 @@ def select_subordinate_document(mail, doc_name):
 
 def select_show_approval(mail, doc_name):
     if doc_name == "null":
-        sql = "" # 自分に対してきた申請一覧を持ってくるsql（全部）
+        sql = "SELECT * FROM approval_document where superior_id=();" # 自分に対してきた申請一覧を持ってくるsql（全部）()内は自分のuser_id
     else:
-        sql = "" # 自分に対してきた申請一覧を持ってくるsql（稟議書名・申請者名の部分一致)
+        sql = "SELECT * FROM approval_document where document_name='%doc_name%';" # 自分に対してきた申請一覧を持ってくるsql（稟議書名・申請者名の部分一致)
     conn = get_connection()
     cur = conn.cursor()
     try:
@@ -172,7 +172,7 @@ def select_show_approval(mail, doc_name):
 def insert_document():   # 新規稟議書のインサート
     conn = get_connection()
     cur = conn.cursor()
-    sql = ""
+    sql = "INSERT into approval_document values()"
     try:
         cur.execute(sql,( ))
     except Exception as e:
@@ -186,7 +186,7 @@ def insert_document():   # 新規稟議書のインサート
 def approval():  # 申請処理
     conn = get_connection()
     cur = conn.cursor()
-    sql = ""    # approvalテーブルにインサートするsql
+    sql = "INSERT into approval values()"    # approvalテーブルにインサートするsql
     try:
         cur.execute()
     except Exception as e:
@@ -200,7 +200,7 @@ def approval():  # 申請処理
 def select_superier_mail(user_id):
     conn = get_connection()
     cur = conn.cursor()
-    sql = ""   # 上司のメールアドレスを取ってくるsql
+    sql = "SELECT mail FROM account where user_id=();"   # 上司のメールアドレスを取ってくるsql
     try:
         cur.execute()
         superier_mail = cur.fetchone()
@@ -212,4 +212,6 @@ def select_superier_mail(user_id):
     return superier_mail
 
 def comment_edit(id, comment):
-    
+    conn = get_connection()
+    cur = conn.cursor()
+    sql = "update approval_document set comment=() where document_id=();"
