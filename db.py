@@ -5,7 +5,7 @@ import random, string
 from MySQLdb import connections
 
 def get_connection():
-    return MySQLdb.connect(user="root", passwd="", host="localhost", db="", charset="utf8")
+    return MySQLdb.connect(user="root", passwd="jyobi2001", host="localhost", db="Approval_management", charset="utf8")
 
 def entry(name, mail, department_id, position_id, superier_mail, auth):
     randlist = [random.choice(string.ascii_letters + string.digits) for i in range(20)]
@@ -13,7 +13,7 @@ def entry(name, mail, department_id, position_id, superier_mail, auth):
     randlist = [random.choice(string.ascii_letters + string.digits) for i in range(20)]
     pw = ''.join(randlist)
     b_pw = bytes(pw, "utf-8")
-    b_salt = bytes(pw, "utf-8")
+    b_salt = bytes(salt, "utf-8")
     hashed_pw = hashlib.pbkdf2_hmac("sha256", b_pw, b_salt, 100).hex()
 
     if auth == "null":
@@ -212,6 +212,10 @@ def select_superier_mail(user_id):
     return superier_mail
 
 def comment_edit(id, comment):
+
     conn = get_connection()
     cur = conn.cursor()
     sql = "update approval_document set comment=comment where document_id=%s;"
+
+    pass
+

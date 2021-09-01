@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet">
+    <title>アカウント登録画面</title>
+</head>
+<body>
+    <fieldset>
+    <form action="{{url_for('entry_complete')}}" method="post" style="display: inline;">
+    メールアドレス：<input type="text" name="mail" placeholder="" value="{{mail}}" readonly><br>
+    名前：<input type="text" name="name" placeholder="例：岩手太郎" value="{{name}}" readonly><br>
+    役職：<select name="position">
+        {% if(position == "5") %}
+        <option value="5" selected>一般社員</option>
+        {% elif(position == "4") %}
+        <option value="4" selected>主任（上司）</option>
+        {% elif(position == "3") %}
+        <option value="3" selected>部長</option>
+        {% elif(position == "2") %}
+        <option value="2" selected>常務取締役</option>
+        {% elif(position == "1") %}
+        <option value="1" selected>社長</option>
+        {% endif %}
+    </select><br>
+    直属の上司のメールアドレス：<input type="text" name="superier_mail" placeholder="例：~.jp,~.com" value="{{superier_mail}}"><br>
+    所属部署：<select name="department" readonly>
+        {% if(department == "1") %}
+        <option value="1" selected>営業部</option>
+        {% else %}
+        <option value="2" selected>開発部</option>
+        {% endif %}
+        </select>
+    <!-- <input type="text" name="department" placeholder="例：~(会社・企業名) ~部"><br> -->
+    <h3 style="text-align: center;">この内容で登録します。</h3>
+    <input type="submit" value="登録">
+    {% if(auth == "1") %}
+    <input type="hidden" name="auth" value="1">
+    {% else %}
+    <input type="hidden" name="auth" value="0">
+    {% endif %}
+</form>
+    <form action="{{url_for('entry')}}" method="post" style="display: inline;">
+    {% if(auth == "1") %}
+    <input type="hidden" name="auth" value="1">
+    {% else %}
+    <input type="hidden" name="auth" value="0">
+    {% endif %}
+    <input type="submit" value="戻る">
+    </form>
+    <!-- <button onclick="location.href='result.html'">登録</button> -->
+    </fieldset>
+
+
+</body>
+</html>
