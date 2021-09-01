@@ -77,9 +77,12 @@ def entry_complete():
     result = db.entry(name, mail, department, position, superier_mail, auth)
     if (result != "failure"):
         result = mail_sample.send_mail(mail, result)  # [result]にパスワードが入ってるから引数にしてメール処理に渡す
-        return render_template("result.html")  # アカウント登録完了画面を表示する
+        return render_template("result.html", auth=auth)  # アカウント登録完了画面を表示する
     else:
-        return redirect(url_for("login_page", error="アカウント登録に失敗")) # 失敗した時ログインページにエラー付きで飛ぶ
+        if(auth == 1):
+            return redirect(url_for("login_page", error="アカウント登録に失敗")) # 失敗した時ログインページにエラー付きで飛ぶ
+        else:
+            return redirect(url_for("show_account", error="アカウント登録失敗"))
 
 @app.route("/show_document")
 def show_document():
@@ -93,7 +96,10 @@ def show_document():
 @app.route("/show_account")
 def show_account():
     if "user" in session:
-        return render_template("main3.html", auth=session["auth"])    # アカウントのメニューを表示,authによって表示異なる
+        error = request.args.get("error")
+        info = request.args.get("info")
+        print(session["auth"])
+        return render_template("main3.html", auth=session["auth"], error=error, info=info)    # アカウントのメニューを表示,authによって表示異なる
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -216,11 +222,11 @@ def update_pw_complete():
 def my_document():
     if "user" in session:
         status = request.args.get("status") # 検索する内容を取ってくる
-        result = db.select_my_document(session["id"], status)
+        result = db.select_my_document(session["user"], status)
         if(result != "failure"):
-            return render_template("", result=result)
+            return render_template("ringi_search.html", result=result)
         else:
-            return render_template("", error="SQLエラー") # エラー付きでメニューを表示する
+            return render_template("show_document", error="SQLエラー") # エラー付きでメニューを表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -230,9 +236,9 @@ def subordinate_document():
         doc_name = request.args.get("doc_name") # 検索する内容を取ってくる
         result = db.select_subordinate_document(session["mail"], doc_name)
         if(result != "failure"):
-            return render_template("", result=result)
+            return render_template("ringi_search.html", result=result)
         else:
-            return render_template("", error="SQLエラー")  # エラー付きでメニューを表示する
+            return render_template("show_document", error="SQLエラー")  # エラー付きでメニューを表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -242,9 +248,9 @@ def show_approval():
         doc_name = request.args.get("doc_name") # 検索する内容を取ってくる
         result = db.show_approval(session["mail"], doc_name)
         if(result != "failure"):
-            return render_template("", result=result)
+            return render_template("ringi_search.html", result=result)
         else:
-            return render_template("", error="SQLエラー")  # エラー付きでメニューを表示する
+            return render_template("show_document", error="SQLエラー")  # エラー付きでメニューを表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 

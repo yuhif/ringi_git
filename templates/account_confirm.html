@@ -8,8 +8,8 @@
     <title>アカウント登録画面</title>
 </head>
 <body>
-    <form action="{{url_for('entry_complete')}}" method="post">
     <fieldset>
+    <form action="{{url_for('entry_complete')}}" method="post" style="display: inline;">
     メールアドレス：<input type="text" name="mail" placeholder="" value="{{mail}}" readonly><br>
     名前：<input type="text" name="name" placeholder="例：岩手太郎" value="{{name}}" readonly><br>
     役職：<select name="position">
@@ -35,17 +35,24 @@
         </select>
     <!-- <input type="text" name="department" placeholder="例：~(会社・企業名) ~部"><br> -->
     <h3 style="text-align: center;">この内容で登録します。</h3>
-    <button onclick="location.href='index.html'">戻る</button>
-    <!-- <button onclick="location.href='result.html'">登録</button> -->
-    </fieldset>
-
+    <input type="submit" value="登録">
     {% if(auth == "1") %}
     <input type="hidden" name="auth" value="1">
     {% else %}
     <input type="hidden" name="auth" value="0">
     {% endif %}
-
-    <input type="submit" value="登録">
 </form>
+    <form action="{{url_for('entry')}}" method="post" style="display: inline;">
+    {% if(auth == "1") %}
+    <input type="hidden" name="auth" value="1">
+    {% else %}
+    <input type="hidden" name="auth" value="0">
+    {% endif %}
+    <input type="submit" value="戻る">
+    </form>
+    <!-- <button onclick="location.href='result.html'">登録</button> -->
+    </fieldset>
+
+
 </body>
 </html>
