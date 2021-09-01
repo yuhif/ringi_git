@@ -144,25 +144,76 @@ pw{
     font-size: 5ex;
 }
 
-.PW2{
+.pw2{
     position: absolute;
-    top: 25%;
-    font-size: 4ex;
-    left: 15%;
-}
-
-input[type=password]{
-    position: absolute;
-    top: 25%;
+    top: 20%;
     font-size: 4ex;
     left: 25%;
-    width: 100px;
 }
+
+.pw3{
+    position: absolute;
+    top: 23%;
+    left: 35%;
+    width: 550px;
+    height: 40px;
+}
+
+.pw4{
+    position: absolute;
+    top: 16%;
+    font-size: 4ex;
+    left: 25%;
+}
+
+.pw5{
+    position: absolute;
+    top: 19%;
+    left: 35%;
+    width: 550px;
+    height: 40px;
+}
+
+.pw6{
+    position: absolute;
+    top: 29%;
+    font-size: 4ex;
+    left: 25%;
+}
+
+.pw7{
+    position: absolute;
+    top: 32%;
+    left: 35%;
+    width: 550px;
+    height: 40px;
+}
+
 
 .back{
     position: absolute;
     top: 40%; 
-    left: 18%;
+    left: 35%;
+    width: 260px;
+    height: 80px;
+    border-radius:100px;
+    font-size: 20px;
+}
+
+.back2{
+    position: absolute;
+    top: 40%; 
+    left: 28%;
+    width: 260px;
+    height: 80px;
+    border-radius:100px;
+    font-size: 20px;
+}
+
+.next{
+    position: absolute;
+    top: 40%; 
+    left: 58%;
     width: 260px;
     height: 80px;
     border-radius:100px;
@@ -174,5 +225,19 @@ input[type=password]{
     top: 10%;
     left: 25%;
     font-size: 40px;
+}
+
+.verification{
+    position: absolute;
+    top: 23%;
+    left: 25%;
+    font-size: 40px; 
+}
+
+.henkou{
+    position: absolute;
+    top: 23%;
+    left: 45%;
+    font-size: 50px; 
 }
 
