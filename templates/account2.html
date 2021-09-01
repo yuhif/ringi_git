@@ -8,8 +8,8 @@
     <title>アカウント登録画面</title>
 </head>
 <body>
-    <form action="{{url_for('entry_confirm')}}" method="post">
     <fieldset>
+    <form action="{{url_for('entry_confirm')}}" method="post" style="display: inline;">
     メールアドレス：<input type="text" name="mail" placeholder=""><br>
     名前：<input type="text" name="name" placeholder="例：岩手太郎"><br>
     役職：<select name="position">
@@ -27,17 +27,22 @@
     <!-- <input type="text" name="department" placeholder="例：~(会社・企業名) ~部"><br> -->
     <!-- <h3 style="text-align: center;">この内容で登録します。</h3> -->
     <br>
-    <button onclick="location.href='index.html'">戻る</button>
     <input type="submit" value="登録">
-    <!-- <button onclick="location.href='result.html'">登録</button>  -->
-    </fieldset>
-
     {% if(auth == "1") %}
     <input type="hidden" name="auth" value="1">
     {% else %}
     <input type="hidden" name="auth" value="0">
     {% endif %}
-
 </form>
+    <!-- <button onclick="location.href='result.html'">登録</button>  -->
+
+    {% if(auth == "1") %}
+    <a href="{{url_for('login_page')}}"><button class="button4">戻る</button></a>
+    {% else %}
+    <a href="{{url_for('show_account')}}"><button class="button4">戻る</button></a>
+    {% endif %}
+
+</fieldset>
+
 </body>
 </html>

@@ -10,7 +10,12 @@
 <body>
     
 <h2>アカウント登録が完了しました。</h2>
+{% if(auth == "1") %}
 <form action="{{url_for('login_page')}}" method="get">
+{% else %}
+<form action="{{url_for('show_account', info=登録完了しました。)}}" method="get">
+{% endif %}
+
     <input type="submit" value="戻る">
 
 </form>
