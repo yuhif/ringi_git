@@ -5,31 +5,32 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link href="../static/account_change.css" rel="stylesheet">
+
     <title></title>
 </head>
 
 <body>
     <form action="change_result.html" method="POST">
-        <fieldset>
 
-            メールアドレス：<input type="email" name="mail" placeholder="例：～.co.jp ～.com"><br>
-            　　　　　名前：<input type="text" name="name" placeholder="例：岩手太郎" maxlength="6"><br>
-            役職：<select name="job">
-                <option value="general">一般社員</option>
-                <option value="chief">主任（上司）</option>
-                <option value="director">部長</option>
-                <option value="managing_director">常務取締役</option>
-                <option value="president">社長</option>
+        メールアドレス：<input type="email" name="mail" placeholder="例：～.co.jp ～.com"><br>
+        　　　　　名前：<input type="text" name="name" placeholder="例：岩手太郎" maxlength="6"><br>
+        役職：<select name="job">
+            <option value="general">一般社員</option>
+            <option value="chief">主任（上司）</option>
+            <option value="director">部長</option>
+            <option value="managing_director">常務取締役</option>
+            <option value="president">社長</option>
 
-            </select><br>
+        </select><br>
 
-            直属の上司のメールアドレス：<input type="email" name="boss_mail"　placeholder="例：～.jp　～.com"><br>
-            所属部署：<input type="text" name="department" placeholder="例：～(会社、企業名) ~部"><br>
-            <button onclick="location.href='menu.html'">戻る</button>
-            <button onclick="location.href='change_result.html'">変更</button>
+        直属の上司のメールアドレス：<input type="email" name="boss_mail" 　placeholder="例：～.jp　～.com"><br>
+        所属部署：<input type="text" name="department" placeholder="例：～(会社、企業名) ~部"><br>
+        <button onclick="location.href='menu.html'">戻る</button>
+        <button onclick="location.href='change_result.html'">変更</button>
 
-        </fieldset>
+
     </form>
 
 </body>
