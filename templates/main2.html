@@ -16,8 +16,10 @@
         <a href="{{url_for('show_account')}}"><button class="button3">アカウント</button></a>
         <a href="{{url_for('logout')}}"><button class="button4">ログアウト</button></a>
         <a href="{{url_for('my_document')}}"><button class="application_button">自分の<br>申請一覧</button></a>
+        {% if(position != 5) %}
         <a href="{{url_for('subordinate_document')}}"><button class="approval_button">承認待ち</button></a>
-        <a href="{{url_for('show_approval')}}"><button class="ubordinate_button">自分の<br>申請一覧</button></a>
+        <a href="{{url_for('show_approval')}}"><button class="ubordinate_button">申請一覧<br>（部下）</button></a>
+        {% endif %}
     </div>
 </body>
 </html>

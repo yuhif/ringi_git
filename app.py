@@ -23,7 +23,7 @@ def login():
     if(result != "failure"):
         session["user"] = result[0]  # user_idを入れる
         session["mail"] = result[1]
-        #session["position"] = result[?]
+        session["position"] = result[5]
         session["auth"] = result[4]
         session.permanent = True
         app.permanent_session_lifetime = timedelta(minutes=30)
@@ -79,7 +79,7 @@ def entry_complete():
         result = mail_sample.send_mail(mail, result)  # [result]にパスワードが入ってるから引数にしてメール処理に渡す
         return render_template("result.html", auth=auth)  # アカウント登録完了画面を表示する
     else:
-        if(auth == 1):
+        if(auth == "1"):
             return redirect(url_for("login_page", error="アカウント登録に失敗")) # 失敗した時ログインページにエラー付きで飛ぶ
         else:
             return redirect(url_for("show_account", error="アカウント登録失敗"))
@@ -87,7 +87,7 @@ def entry_complete():
 @app.route("/show_document")
 def show_document():
     if "user" in session:
-        return render_template("main2.html", position="")    # 稟議書一覧を開くためのメニューを表示、役職で表示異なる  
+        return render_template("main2.html", position=session["position"])    # 稟議書一覧を開くためのメニューを表示、役職で表示異なる  
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -185,7 +185,7 @@ def my_account():
 @app.route("/update_pw")
 def update_pw():
     if "user" in session:
-        return render_template("", error="")   # 「パスワードの変更」を押したときに表示するパスワード変更ページ
+        return render_template("main5.html", error="")   # 「パスワードの変更」を押したときに表示するパスワード変更ページ
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -193,26 +193,30 @@ def update_pw():
 def update_pw2():
     if "user" in session:
         pw = request.form.get("pw")
-        if(db.select_pw(session["user"], pw)):      # 前のパスワードがあっているか確認する(TrueかFalseが返ってくる)
-            return render_template("")            # 次のページを表示
+        if(pw != ""):
+            if(db.select_pw(session["user"], pw)):      # 前のパスワードがあっているか確認する(TrueかFalseが返ってくる)
+                return render_template("main6.html")            # 次のページを表示
+            else:
+                return redirect(url_for("update_pw"), error="パスワードが違います")  #  errorを表示して今のページを表示    
         else:
-            return render_template("", error="パスワードが違います")  #  errorを表示して今のページを表示    
+            return redirect(url_for("update_pw"), error="パスワードが違います")
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
 @app.route("/update_pw_complete", methods=["POST"])
 def update_pw_complete():
     if "user" in session:
-        pw = request.form.get("pw")         # 1回目のパスワード入力
+        pw = request.form.get("pw")       # 1回目のパスワード入力
+        print(pw)
         confirm_pw = request.form.get("pw") # 2回目のパスワード入力
-        if(pw == confirm_pw):
-            result = db.update_pw(session["id"], pw)         # DBのパスワードを更新する
+        if(pw == confirm_pw and pw == ""):
+            result = db.update_pw(session["user"], pw)         # DBのパスワードを更新する
             if(result != "failure"):
-                return render_template("")      # パスワード変更完了画面を表示
+                return render_template("main7.html")      # パスワード変更完了画面を表示
             else:
-                return render_template("", error="sqlエラー") # 同じ画面をエラー付きで表示
+                return redirect(url_for("update_pw"), error="sqlエラー") # 同じ画面をエラー付きで表示
         else:
-            return render_template("", error="同じパスワードが入力されていません")  # 同じ画面をエラー付きで表示する
+            return redirect(url_for("update_pw"), error="同じパスワードが入力されていません")  # 同じ画面をエラー付きで表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -226,7 +230,7 @@ def my_document():
         if(result != "failure"):
             return render_template("ringi_search.html", result=result)
         else:
-            return render_template("show_document", error="SQLエラー") # エラー付きでメニューを表示する
+            return redirect(url_for("show_document", error="SQLエラー")) # エラー付きでメニューを表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -238,7 +242,7 @@ def subordinate_document():
         if(result != "failure"):
             return render_template("ringi_search.html", result=result)
         else:
-            return render_template("show_document", error="SQLエラー")  # エラー付きでメニューを表示する
+            return redirect(url_for("show_document", error="SQLエラー"))  # エラー付きでメニューを表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -250,7 +254,7 @@ def show_approval():
         if(result != "failure"):
             return render_template("ringi_search.html", result=result)
         else:
-            return render_template("show_document", error="SQLエラー")  # エラー付きでメニューを表示する
+            return redirect(url_for("show_document", error="SQLエラー"))  # エラー付きでメニューを表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 

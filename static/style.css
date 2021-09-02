@@ -85,3 +85,22 @@ td{
 h3 {
     color: black;
 }
+
+.modoru {
+    position: absolute;
+    left: 900px;
+    top: 130px;
+}
+
+.modoru2 {
+    position: absolute;
+    left: 450px;
+    top: 193px;
+}
+
+.entry_button {
+    position: absolute;
+    left: 820px;
+    top: 193px;
+    z-index: 1;
+}
