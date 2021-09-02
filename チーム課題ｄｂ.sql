@@ -89,7 +89,9 @@ create table approval_document(
 	
 	
 Eâg‹c‘ƒe[ƒuƒ‹insert•¶
-insert into approval_document values(2,1,"âg‹c‘",sysdate(),"âg‹c“à—e‚Å‚·",100,400000,40000000,"——R‚Å‚·","ƒRƒƒ“ƒg‚Å‚·",0,5,(”CˆÓ‚Ì“ú•t));
+insert into approval_document(user_id,document_name,application_date,contents,quaritity,price,total_payment,
+reason,comment,result,authorizer_id,preferred_day) 
+value(1,"âg‹c‘",sysdate(),"âg‹c“à—e‚Å‚·",100,400000,40000000,"——R‚Å‚·","ƒRƒƒ“ƒg‚Å‚·",0,5,(”CˆÓ‚Ì“ú•t));
 
 
 âg‹c‘ŠÇ—ƒVƒXƒeƒ€EƒZƒŒƒNƒg•¶
@@ -111,7 +113,7 @@ insert into approval_document values(2,1,"âg‹c‘",sysdate(),"âg‹c“à—e‚Å‚·",100,4
 
 ³”Fƒe[ƒuƒ‹
 create table approval(
-	approval_id integer(10) primay key auto_increment,
+	approval_id integer(10) primary key auto_increment,
 	user_id integer,
 	foreign key (user_id)
 	references user(user_id),

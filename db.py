@@ -15,7 +15,7 @@ def entry(name, mail, department_id, position_id, superier_mail, auth):
     b_pw = bytes(pw, "utf-8")
     b_salt = bytes(salt, "utf-8")
     hashed_pw = hashlib.pbkdf2_hmac("sha256", b_pw, b_salt, 100).hex()
-
+    
     if auth == "null":
         auth = 0
 
@@ -35,7 +35,7 @@ def entry(name, mail, department_id, position_id, superier_mail, auth):
 def login(mail, pw):
     conn = get_connection()
     cur = conn.cursor()
-    sql = "SELECT user_id,mail,password,salt,auth FROM user WHERE mail = %s;" # 役職も
+    sql = "SELECT user_id,mail,password,salt,auth,position_id FROM user WHERE mail = %s;" # 役職も
     try:
         cur.execute(sql, (mail, ))
         result = cur.fetchone()
@@ -46,6 +46,8 @@ def login(mail, pw):
     b_pw = bytes(pw, "utf-8")
     b_salt = bytes(result[3], "utf-8")
     hashed_pw = hashlib.pbkdf2_hmac("sha256", b_pw, b_salt, 100).hex()
+    print(hashed_pw)
+    print(result[2])
     if(hashed_pw == result[2]):
         return result # 結果を返す
     else:
@@ -72,23 +74,25 @@ def select_account(name):   # アカウントの一覧を取得する
 def select_pw(id, pw):      # pw変更する時の処理。前のpwを取得する。
     conn = get_connection()
     cur = conn.cursor()
-    sql = "SELECT pw FROM user where user_id=%s;"
+    sql = "SELECT pw,salt FROM user where user_id=%s;"
     try:
         cur.execute(sql,(id, ))
         result = cur.fetchone()
     except Exception as e:
         print("SQLの実行に失敗", e)
-        return "failure"
+        return False
     cur.close()
     conn.close()
     # resultの中のソルトと引数のpwをハッシュしてresultの中のpwと比較する
-    # b_pw = bytes(, "utf-8")
-    # b_salt = bytes(, "utf-8")
-    # hashed_pw = hashlib.pbkdf2_hmac("sha256", b_pw, b_salt, 100).hex()
-    # if (True):
-    #     return True
-    # else:
-    #     return False
+    b_pw = bytes(pw, "utf-8")
+    b_salt = bytes(result[1], "utf-8")
+    hashed_pw = hashlib.pbkdf2_hmac("sha256", b_pw, b_salt, 100).hex()
+    
+    if (hashed_pw == result[0]):
+        return True
+    else:
+        return False
+
 
 def update_pw(user_id, pw):
     conn = get_connection()
@@ -122,11 +126,14 @@ def select_my_document(user_id, status):
     if status == "null":
         sql = "SELECT * FROM approval_document where user_id=%s;"  # 自分の稟議申請一覧を取ってくるsql(全部)
     else:
-        sql = "SELECT * FROM approval_document where status=%s;"  # 自分の稟議申請一覧を取ってくるsql(statusでwhereをつかう)
+        sql = "SELECT * FROM approval_document where status=%s and user_id=%s;"  # 自分の稟議申請一覧を取ってくるsql(statusでwhereをつかう)
     conn = get_connection()
     cur = conn.cursor()
     try:
-        cur.execute()
+        if(status == "null"):
+            cur.execute(sql, (user_id, ))
+        else:
+            cur.execute(sql, (status, user_id))
         result = cur.fetchall()
     except Exception as e:
         print("SQLの実行に失敗", e)
@@ -139,11 +146,15 @@ def select_subordinate_document(mail, doc_name):
     if doc_name == "null":
         sql = "SELECT * FROM approval_document where superior_id=%s;" # 部下の稟議申請一覧を持ってくるsql（全部）（）内は自分のuser_id
     else:
-        sql = "SELECT * FROM approval_document where document_name like '%doc_name%'; " # 部下の稟議申請一覧を持ってくるsql（稟議書名・申請者名の部分一致)
+        doc_name = "%" + doc_name + "%"
+        sql = "SELECT * FROM approval_document where document_name like %s and superior_id=%s; " # 部下の稟議申請一覧を持ってくるsql（稟議書名・申請者名の部分一致)
     conn = get_connection()
     cur = conn.cursor()
     try:
-        cur.execute(sql, ())
+        if(doc_name == "null"):
+            cur.execute(sql, (mail, ))
+        else:
+            cur.execute(sql, (doc_name, mail))
         result = cur.fetchall()
     except Exception as e:
         print("SQLの実行に失敗", e)

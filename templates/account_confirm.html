@@ -9,7 +9,7 @@
 </head>
 <body>
     <fieldset>
-    <form action="{{url_for('entry_complete')}}" method="post" style="display: inline;">
+    <form action="{{url_for('entry_complete')}}" method="post">
     メールアドレス：<input type="text" name="mail" placeholder="" value="{{mail}}" readonly><br>
     名前：<input type="text" name="name" placeholder="例：岩手太郎" value="{{name}}" readonly><br>
     役職：<select name="position">
@@ -35,21 +35,23 @@
         </select>
     <!-- <input type="text" name="department" placeholder="例：~(会社・企業名) ~部"><br> -->
     <h3 style="text-align: center;">この内容で登録します。</h3>
-    <input type="submit" value="登録">
+    <input type="submit" value="登録" class="entry_button">
     {% if(auth == "1") %}
     <input type="hidden" name="auth" value="1">
     {% else %}
     <input type="hidden" name="auth" value="0">
     {% endif %}
 </form>
-    <form action="{{url_for('entry')}}" method="post" style="display: inline;">
+<form action="{{url_for('entry')}}" method="post" class="modoru2">
     {% if(auth == "1") %}
     <input type="hidden" name="auth" value="1">
+    <input type="hidden" name="pw" value="admin">
     {% else %}
     <input type="hidden" name="auth" value="0">
     {% endif %}
     <input type="submit" value="戻る">
     </form>
+
     <!-- <button onclick="location.href='result.html'">登録</button> -->
     </fieldset>
 
