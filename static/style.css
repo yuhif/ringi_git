@@ -1,10 +1,10 @@
-title{
+title {
     left: 0%;
-    right:0%;
-    
+    right: 0%;
+
 }
 
-button{
+button {
     margin-right: auto;
     margin-left: auto;
 }
@@ -22,7 +22,7 @@ body {
     height: 1200px;
     background: white;
     color: indigo;
-    
+
 }
 
 form {
@@ -42,46 +42,69 @@ fieldset {
     height: 990px;
     background: #7fde2d;
 
-    
+
 }
 
-table{
+table {
     margin-left: auto;
     margin-right: auto;
     width: 70px;
     height: 30px;
     color: black;
+    width: 100%;
+    table-layout: fixed;
+    word-break: break-all;
+    word-wrap: break-all;
 }
 
-.t1{
+.t1 {
     background: aqua;
     color: black;
 }
 
-.t2{
-    margin-left: 0%;
-}
-
-tr{
+.t2 {
     width: auto;
     height: auto;
-    margin-left: 0%;
-    margin-right: 0%;
+    box-sizing: border-box;
+    width: 100%;
+    table-layout: fixed;
+    word-break: break-all;
+    word-wrap: break-all;
+    
 }
 
-td{
-    width: 15px;
-    height: auto;
+tr {
+    
+    box-sizing: border-box;
+    
+}
+
+td {
+    margin-right: 2em;
 }
 
 
-.one{
+.one {
     background-color: aqua;
     color: black;
-    width: auto;
-    height: auto;
+    
 }
 
 h3 {
     color: black;
 }
+
+
+
+.tb {
+    background: aqua;
+}
+
+.rk1 {
+    margin-right: 2em;
+}
+
+.dd{
+    background: aqua;
+}
+
