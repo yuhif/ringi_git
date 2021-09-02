@@ -7,15 +7,18 @@
     <link rel="stylesheet" href="../static/ringi.css">
     <title>Document</title>
 </head>
-
 <body>
     <div class="layout">
         <h1 class="title">稟議書申請システム</h1>
         <button class="button1">作成</button>
-        <a href="{{url_for('show_document')}}"><button class="button2">一覧</button></a>
-        <a href="{{url_for('show_account')}}"><button class="button3">アカウント</button></a>
-        <a href="{{url_for('logout')}}"><button class="button4">ログアウト</button></a>
-        <a><button class="change">パスワードの変更</button></a>
+        <button class="button2">一覧</button>
+        <button class="button3">アカウント</button>
+        <button class="button4">ログアウト</button>
+        <p class="input">現在のパスワードを入力してください。</p>
+        <p class="pw2">pw:</p> 
+        <input type="password" class="pw3" name="pw3">
+        <button class="back">戻る</button>
+        <button class="next">次へ</button>
     </div>
 </body>
 </html>

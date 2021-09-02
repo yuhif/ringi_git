@@ -1,0 +1,243 @@
+.layout{
+    position: absolute;
+    height: 1200px;
+    width: 1190px;
+}
+
+.button1{
+    position: absolute;
+    top: 7%;
+    left: 15%;
+    width: 200px;
+    height: 50px;
+    font-size: 40px;
+    text-align: center;
+}
+
+.button2{
+    position: absolute;
+    top: 7%;
+    left: 51%;
+    width: 200px;
+    height: 50px;
+    font-size: 35px;
+}
+
+.button3{
+    position: absolute;
+    top: 7%;
+    left: 87%;
+    width: 200px;
+    height: 50px;
+    font-size: 25px;
+}
+
+.button4{
+    position: absolute;
+    top: 0%;
+    left: 100%;
+    width: 150px;
+    height: 30px;
+}
+
+.application_button{
+    position: absolute;
+    top: 20%;
+    left: 2%;
+    width: 260px;
+    height: 80px;
+    border-radius:100px;
+}
+
+.approval_button{
+    position: absolute;
+    top: 20%;
+    left: 39%;
+    width: 260px;
+    height: 80px;
+    border-radius:100px;
+}
+
+.ubordinate_button{
+    position: absolute;
+    top: 20%;
+    left: 76%;
+    width: 260px;
+    height: 80px;
+    border-radius:100px;
+}
+
+.account_information{
+    position: absolute;
+    top: 15%;
+    left: 5%;
+    width: 640px;
+    height: 400px;
+    border-radius:100%;
+}
+
+.account_delete{
+    position: absolute;
+    top: 15%;
+    left: 82%;
+    width: 300px;
+    height: 100px;
+    border-radius:100%;
+}
+
+.account_information_change{
+    position: absolute;
+    top: 27%;
+    left: 82%;
+    width: 300px;
+    height: 100px;
+    border-radius:100%;
+}
+
+.account_registration{
+    position: absolute;
+    top: 39%;
+    left: 82%;
+    width: 300px;
+    height: 100px;
+    border-radius:100%;
+}
+
+.change{
+    position: absolute;
+    top: 40%;
+    left: 80%;
+    width: 200px;
+    height: 70px;
+    border-radius:40%;
+}
+
+.mail{
+    padding-left: 50px;
+    padding-top: 100px;
+}
+
+mail{
+    padding-left: 100px;
+    padding-top: 100px; 
+}
+
+.pw{
+    padding-left: 50px;
+    padding-top: 200px;
+}
+
+pw{
+    padding-left: 100px;
+    padding-top: 200px; 
+}
+
+.login{
+    padding-left: 120px;
+    padding-top: 220px;
+}
+
+.text1{
+    position: absolute;
+    top: 17%; 
+    left: 25%;
+    font-size: 5ex;
+}
+
+.pw2{
+    position: absolute;
+    top: 20%;
+    font-size: 4ex;
+    left: 25%;
+}
+
+.pw3{
+    position: absolute;
+    top: 23%;
+    left: 35%;
+    width: 550px;
+    height: 40px;
+}
+
+.pw4{
+    position: absolute;
+    top: 16%;
+    font-size: 4ex;
+    left: 25%;
+}
+
+.pw5{
+    position: absolute;
+    top: 19%;
+    left: 35%;
+    width: 550px;
+    height: 40px;
+}
+
+.pw6{
+    position: absolute;
+    top: 29%;
+    font-size: 4ex;
+    left: 25%;
+}
+
+.pw7{
+    position: absolute;
+    top: 32%;
+    left: 35%;
+    width: 550px;
+    height: 40px;
+}
+
+
+.back{
+    position: absolute;
+    top: 40%; 
+    left: 35%;
+    width: 260px;
+    height: 80px;
+    border-radius:100px;
+    font-size: 20px;
+}
+
+.back2{
+    position: absolute;
+    top: 40%; 
+    left: 28%;
+    width: 260px;
+    height: 80px;
+    border-radius:100px;
+    font-size: 20px;
+}
+
+.next{
+    position: absolute;
+    top: 40%; 
+    left: 58%;
+    width: 260px;
+    height: 80px;
+    border-radius:100px;
+    font-size: 20px;
+}
+
+.input{
+    position: absolute;
+    top: 10%;
+    left: 25%;
+    font-size: 40px;
+}
+
+.verification{
+    position: absolute;
+    top: 23%;
+    left: 25%;
+    font-size: 40px; 
+}
+
+.henkou{
+    position: absolute;
+    top: 23%;
+    left: 45%;
+    font-size: 50px; 
+}
+

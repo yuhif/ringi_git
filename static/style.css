@@ -1,24 +1,87 @@
-.mail{
-    padding-left: 50px;
-    padding-top: 100px;
+title{
+    left: 0%;
+    right:0%;
+    
 }
 
-mail{
-    padding-left: 100px;
-    padding-top: 100px; 
+button{
+    margin-right: auto;
+    margin-left: auto;
 }
 
-.pw{
-    padding-left: 50px;
-    padding-top: 200px;
+
+
+
+
+body {
+    text-align: center;
+    cursor: pointer;
+    background-image: url(book.jpg);
+    margin: auto;
+    width: 600px;
+    height: 1200px;
+    background: white;
+    color: indigo;
+    
 }
 
-pw{
-    padding-left: 100px;
-    padding-top: 200px; 
+form {
+    float: left;
+    clear: both;
+    text-align: center;
+    margin: auto;
+    width: 900px;
+    height: 950px;
+
 }
 
-.login{
-    padding-left: 120px;
-    padding-top: 220px;
+fieldset {
+    text-align: center;
+    margin: auto;
+    width: 900px;
+    height: 990px;
+    background: #7fde2d;
+
+    
+}
+
+table{
+    margin-left: auto;
+    margin-right: auto;
+    width: 70px;
+    height: 30px;
+    color: black;
+}
+
+.t1{
+    background: aqua;
+    color: black;
+}
+
+.t2{
+    margin-left: 0%;
+}
+
+tr{
+    width: auto;
+    height: auto;
+    margin-left: 0%;
+    margin-right: 0%;
+}
+
+td{
+    width: 15px;
+    height: auto;
+}
+
+
+.one{
+    background-color: aqua;
+    color: black;
+    width: auto;
+    height: auto;
+}
+
+h3 {
+    color: black;
 }

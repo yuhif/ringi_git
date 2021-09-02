@@ -2,7 +2,7 @@ from smtplib import SMTP
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-def send_mail(to, PW):
+def send_mail(to):
     # 送信に必要な情報を定数で定義
     ID = "numatakazuya.1234@gmail.com"
     PASS = "yutakuma1334"
@@ -29,8 +29,3 @@ def send_mail(to, PW):
 
     server.quit()       # TLS通信終了
     print("メール送信完了！")
-
-if __name__ == "__main__":
-
-    # メール送信処理の呼び出し
-    send_mail(to="yuta0304fy@gmail.com", PW = "yuta0304fy")
