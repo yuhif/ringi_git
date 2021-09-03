@@ -31,18 +31,19 @@
 
         </select><br>
 
-        直属の上司のメールアドレス：<input type="email" name="boss_mail" 　placeholder="例：～.jp　～.com" value="{{reslut[6]}}"><br>
+        直属の上司のメールアドレス：<input type="email" name="boss_mail" 　placeholder="例：～.jp　～.com" value="{{result[6]}}"><br>
         所属部署：
         {% if result[4] == 1 %}
         <input type="text" name="department" placeholder="例：～(会社、企業名) ~部" value="営業部" readonly><br>
+        {% endif %}
         {% if result[4] == 1 %}
         <input type="text" name="department" placeholder="例：～(会社、企業名) ~部" value="開発部" readonly><br>
-
+        {% endif %}
     </form>
     <a href="{{url_for('show_account')}}"><button>戻る</button></a>
-    <form action="{{url_for('update_account_complete')}}" method="post">
+    <form action="{{url_for('delete_account_complete')}}" method="post">
         <input type="hidden" name="result" value="{{result}}">
-        <button>変更</button>
+        <button>削除</button>
     </form>
 
 </body>

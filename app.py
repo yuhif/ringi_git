@@ -112,29 +112,31 @@ def show_delete_account():
         name = request.args.get("name")
         result = db.select_account(name)           # DBからアカウント一覧を取得する(名前の部分一致OR全部)
         if(result != "failure"):
-            return render_template("", result=result, error="")    # アカウントの一覧を表示(削除するアカウント)  
+            return render_template("control.html", result=result, error="")    # アカウントの一覧を表示(削除するアカウント)  
         else:
             return redirect(url_for("top_page", error="sqlエラー"))
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
-@app.route("/delete_account")
-def delete_accout():
+@app.route("/delete_account", methods=["POST"])
+def delete_account():
     if "user" in session:
-        result = request.args.get("result")
-        return render_template("", result=result)  # アカウント削除確認画面を表示する
+        result = request.form.get("result")
+        return render_template("account_delete.html", result=result)  # アカウント削除確認画面を表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
-@app.route("/delete_account_complete")
+@app.route("/delete_account_complete", methods=["POST"])
 def delete_account_complete():
     if "user" in session:
-        mail = request.args.get("mail")
+        mail = request.form.get("mail")
+        print(mail)
+        print(mail)
         result = db.delete_account(mail)
         if(result != "failure"):
-            return render_template("")    # アカウント削除完了画面を表示する
+            return render_template("delete_result.html")    # アカウント削除完了画面を表示する
         else:
-            return render_template("", error="SQLエラー")  # エラー付きでメニューを表示    
+            return redirect(url_for("show_account", error="SQLエラー"))  # エラー付きでメニューを表示    
     else:    
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -145,9 +147,9 @@ def show_update_account():
         name = request.args.get("name")
         result = db.select_account(name)      # DBからアカウント一覧を取得する(名前の部分一致OR全部)
         if(result != "failure"):
-            return render_template("", result=result) # アカウントの一覧を表示(変更するアカウント)
+            return render_template("control.html", result=result) # アカウントの一覧を表示(変更するアカウント)
         else:
-            return render_template("", result="", error="sqlエラー")
+            return redirect(url_for("show_account", result="", error="sqlエラー"))
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 

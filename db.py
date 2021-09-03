@@ -242,3 +242,18 @@ def comment_edit(id, comment):
 
     pass
 
+def delete_account(mail):
+    conn = get_connection()
+    cur = conn.cursor()
+    print(mail)
+    sql = "DELETE FROM user WHERE mail = %s"
+    try:
+        cur.execute(sql, (mail, ))
+        cur.close()
+        conn.commit()
+        conn.close()
+        return "success"
+    except Exception as e:
+        print("SQLの実行に失敗", e)
+        return "failure"
+
