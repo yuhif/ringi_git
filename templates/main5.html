@@ -16,9 +16,9 @@
         <a href="{{url_for('logout')}}"><button class="button4">ログアウト</button></a>
         <p class="input">現在のパスワードを入力してください。</p>
         <p class="pw2">pw:</p> 
-        <input type="password" class="pw3" name="pw3">
         <a href="{{url_for('my_account')}}"><button class="back">戻る</button></a>
         <form action="{{url_for('update_pw2')}}" method="post">
+            <input type="password" class="pw3" name="pw3">
         <button class="next">次へ</button></form>
     </div>
 </body>
