@@ -24,8 +24,8 @@
                 <td>{{list[4]}}</td>
                 <td>{{list[1]}}</td>
                 <td>{{list[6]}}</td>
-                <td><form action="{{url_for('/show_delete_account')}}" method="POST">
-                    <a href="{{url_for('/delete_account')}}">削除</a> <input type="hidden" name="result" value="{{list}}">
+                <td><form action="{{url_for('show_delete_account')}}" method="post">
+                    <input type="submit" value="削除"> <input type="hidden" name="result" value="{{list}}">
                 </form></td>
             </tr>
             {% endfor %}
