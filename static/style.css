@@ -1,0 +1,130 @@
+title {
+    left: 0%;
+    right: 0%;
+
+}
+
+button {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+
+
+
+
+body {
+    text-align: center;
+    cursor: pointer;
+    background-image: url(book.jpg);
+    margin: auto;
+    width: 600px;
+    height: 1200px;
+    background: white;
+    color: indigo;
+
+}
+
+form {
+    float: left;
+    clear: both;
+    text-align: center;
+    margin: auto;
+    width: 900px;
+    height: 950px;
+
+}
+
+fieldset {
+    text-align: center;
+    margin: auto;
+    width: 900px;
+    height: 990px;
+    background: #7fde2d;
+
+
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+    width: 70px;
+    height: 30px;
+    color: black;
+    width: 100%;
+    table-layout: fixed;
+    word-break: break-all;
+    word-wrap: break-all;
+}
+
+.t1 {
+    background: aqua;
+    color: black;
+}
+
+.t2 {
+    width: auto;
+    height: auto;
+    box-sizing: border-box;
+    width: 100%;
+    table-layout: fixed;
+    word-break: break-all;
+    word-wrap: break-all;
+    
+}
+
+tr {
+    
+    box-sizing: border-box;
+    
+}
+
+td {
+    margin-right: 2em;
+}
+
+
+.one {
+    background-color: aqua;
+    color: black;
+    
+}
+
+h3 {
+    color: black;
+}
+
+.modoru {
+    position: absolute;
+    left: 900px;
+    top: 130px;
+}
+
+.modoru2 {
+    position: absolute;
+    left: 450px;
+    top: 193px;
+}
+
+.entry_button {
+    position: absolute;
+    left: 820px;
+    top: 193px;
+    z-index: 1;
+}
+
+
+
+.tb {
+    background: aqua;
+}
+
+.rk1 {
+    margin-right: 2em;
+}
+
+.dd{
+    background: aqua;
+}
+
+
