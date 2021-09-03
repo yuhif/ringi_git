@@ -17,8 +17,8 @@ def login_page():
 
 @app.route("/login", methods=["POST"])  #トップページ
 def login():
-    mail = request.form.get("mail")
-    pw = request.form.get("pw")
+    mail = request.form.get("textmail")
+    pw = request.form.get("textpw")
     if(pw != None):
         result = db.login(mail, pw)
         if(result != "failure"):
@@ -112,7 +112,7 @@ def show_delete_account():
         name = request.args.get("name")
         result = db.select_account(name)           # DBからアカウント一覧を取得する(名前の部分一致OR全部)
         if(result != "failure"):
-            return render_template("account_kanri.html", result=result, error="")    # アカウントの一覧を表示(削除するアカウント)  
+            return render_template("", result=result, error="")    # アカウントの一覧を表示(削除するアカウント)  
         else:
             return redirect(url_for("top_page", error="sqlエラー"))
     else:
@@ -122,7 +122,7 @@ def show_delete_account():
 def delete_accout():
     if "user" in session:
         result = request.args.get("result")
-        render_template("", result=result)  # アカウント削除確認画面を表示する
+        return render_template("", result=result)  # アカウント削除確認画面を表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -155,7 +155,7 @@ def show_update_account():
 def update_accout():
     if "user" in session():
         result = request.form.get("result")
-        return render_template("", result=result)  # 選択したアカウントを変更するページを表示する
+        return render_template("account_change.html", result=result)  # 選択したアカウントを変更するページを表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -171,9 +171,9 @@ def update_account_complete():
         error = request.args.get("error")
         result = db.accout_update(id, name, mail, position, superier_mail, department)  # resultにfailureかsuccessが返ってくる
         if(result != "failure"):
-            return render_template("")  # アカウント情報の変更完了画面を表示する
+            return render_template("change_result.html")  # アカウント情報の変更完了画面を表示する
         else:
-            return render_template("", error="更新失敗") # エラー付きアカウントメニュー画面を表示する 
+            return redirect(url_for("show_account", error="更新失敗")) # エラー付きアカウントメニュー画面を表示する 
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 

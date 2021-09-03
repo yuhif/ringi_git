@@ -9,7 +9,7 @@
 </head>
 
 <body>
-
+    <form action="{{url_for('login')}}" method="post">
     <div class="box"></div>
     <p class="title">稟議書申請システム</p>
     <p class="mail">メールアドレス</p>
@@ -17,6 +17,6 @@
     <p class="pw">パスワード</p>
     <input type="text" class="textpw" name="textpw">
     <input class="login" type="submit" value="ログイン">
-
+    </form>
 </body>
 </html>
