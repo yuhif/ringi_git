@@ -1,0 +1,44 @@
+.searchtext{
+	white-space: nowrap;
+}
+p{
+	white-space: nowrap;
+	position: relative;
+	bottom: 40px;
+}
+.search{
+	background-color:#000000;
+	text-align:center;
+	border: 2;
+	color:#ffffff
+}
+th,td{
+	text-align:center;
+	border: solid 1px;
+}
+
+table{
+	border-collapse: collapse;
+	position: relative;
+	bottom: 60px;
+}
+
+.btn{
+  color: #fff;
+  background-color: #000000;
+  border-radius: 100vh;
+  position: relative;
+  top: -125px;
+  right: -200px;
+
+}
+
+.delete{
+	text-align: center;
+	border: 2;
+	position: relative;
+	bottom: 40px;
+	right: -120px;
+}
+	
+	
