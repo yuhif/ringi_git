@@ -1,49 +1,24 @@
-title {
-    left: 0%;
-    right: 0%;
 
-}
 
 button {
     margin-right: auto;
     margin-left: auto;
 }
 
-
-
-
-
-body {
+.pw{
     text-align: center;
-    cursor: pointer;
-    background-image: url(book.jpg);
-    margin: auto;
-    width: 600px;
-    height: 1200px;
-    background: white;
-    color: indigo;
-
+    margin-right: auto;
 }
 
-form {
-    float: left;
-    clear: both;
-    text-align: center;
-    margin: auto;
-    width: 900px;
-    height: 950px;
 
+form{
+    margin: 0 auto;
+    text-align: center;
+    width: 250px;
 }
 
-fieldset {
-    text-align: center;
-    margin: auto;
-    width: 900px;
-    height: 990px;
-    background: #7fde2d;
 
 
-}
 
 table {
     margin-left: auto;
@@ -102,6 +77,7 @@ h3 {
 
 .rk1 {
     margin-right: 2em;
+    margin: auto;
 }
 
 .dd{
