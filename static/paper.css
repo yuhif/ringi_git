@@ -1,0 +1,27 @@
+.layout{
+    position: absolute;
+    height: 1200px;
+    width: 1190px;
+}
+
+.square1{
+    margin-left: 100px;
+    margin-top: 200px;
+    width: 450px;
+    height: 10px;
+}
+
+.square2{
+    margin-left: 500px;
+    margin-top: 200px;
+    width: 450px;
+    height: 10px;
+}
+
+.square3{
+    margin-left: 100px;
+    margin-top: 300px;
+    width: 450px;
+    height: 10px;
+}
+
