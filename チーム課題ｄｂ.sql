@@ -21,7 +21,11 @@ create table official_position(
 );
 
 ・役職テーブルinsert文
-insert into official_position values(1,'部長');
+insert into official_position values(1,'社長');
+insert into official_position values(2,'常務取締役');
+insert into official_position values(3,'部長');
+insert into official_position values(4,'主任');
+insert into official_position values(5,'一般社員');
 
 
 利用者テーブル

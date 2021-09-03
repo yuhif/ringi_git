@@ -19,17 +19,20 @@ def login_page():
 def login():
     mail = request.form.get("mail")
     pw = request.form.get("pw")
-    result = db.login(mail, pw)
-    if(result != "failure"):
-        session["user"] = result[0]  # user_idを入れる
-        session["mail"] = result[1]
-        session["position"] = result[5]
-        session["auth"] = result[4]
-        session.permanent = True
-        app.permanent_session_lifetime = timedelta(minutes=30)
-        return redirect(url_for("top_page"))              #  トップページにリダイレクト 
+    if(pw != None):
+        result = db.login(mail, pw)
+        if(result != "failure"):
+            session["user"] = result[0]  # user_idを入れる
+            session["mail"] = result[1]
+            session["position"] = result[5]
+            session["auth"] = result[4]
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(minutes=30)
+            return redirect(url_for("top_page"))              #  トップページにリダイレクト 
+        else:
+            return redirect(url_for("login_page", error="パスワードかメールアドレスが違います。")) #失敗したとき
     else:
-        return redirect(url_for("login_page", error="パスワードかメールアドレスが違います。")) #失敗したとき
+        return redirect(url_for("login_page", error="パスワードかメールアドレスが違います。"))
 
 @app.route("/top") # トップページ
 def top_page():
@@ -192,31 +195,31 @@ def update_pw():
 @app.route("/update_pw2", methods=["POST"])
 def update_pw2():
     if "user" in session:
-        pw = request.form.get("pw")
+        pw = request.form.get("pw3")
         if(pw != ""):
             if(db.select_pw(session["user"], pw)):      # 前のパスワードがあっているか確認する(TrueかFalseが返ってくる)
                 return render_template("main6.html")            # 次のページを表示
             else:
-                return redirect(url_for("update_pw"), error="パスワードが違います")  #  errorを表示して今のページを表示    
+                return redirect(url_for("update_pw", error="パスワードが違います"))  #  errorを表示して今のページを表示    
         else:
-            return redirect(url_for("update_pw"), error="パスワードが違います")
+            return redirect(url_for("update_pw", error="パスワードが違います"))
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
 @app.route("/update_pw_complete", methods=["POST"])
 def update_pw_complete():
     if "user" in session:
-        pw = request.form.get("pw")       # 1回目のパスワード入力
-        print(pw)
-        confirm_pw = request.form.get("pw") # 2回目のパスワード入力
-        if(pw == confirm_pw and pw == ""):
+        pw = request.form.get("pw5")       # 1回目のパスワード入力
+        confirm_pw = request.form.get("pw7") # 2回目のパスワード入力
+        if(pw == confirm_pw and pw != ""):
+            print(pw)
             result = db.update_pw(session["user"], pw)         # DBのパスワードを更新する
             if(result != "failure"):
                 return render_template("main7.html")      # パスワード変更完了画面を表示
             else:
-                return redirect(url_for("update_pw"), error="sqlエラー") # 同じ画面をエラー付きで表示
+                return redirect(url_for("update_pw", error="sqlエラー")) # 同じ画面をエラー付きで表示
         else:
-            return redirect(url_for("update_pw"), error="同じパスワードが入力されていません")  # 同じ画面をエラー付きで表示する
+            return redirect(url_for("update_pw", error="同じパスワードが入力されていません"))  # 同じ画面をエラー付きで表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -250,7 +253,7 @@ def subordinate_document():
 def show_approval():
     if "user" in session:
         doc_name = request.args.get("doc_name") # 検索する内容を取ってくる
-        result = db.show_approval(session["mail"], doc_name)
+        result = db.select_show_approval(session["user"], doc_name)
         if(result != "failure"):
             return render_template("ringi_search.html", result=result)
         else:
