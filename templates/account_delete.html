@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="../static/account_change.css" rel="stylesheet">
+
+    <title></title>
+</head>
+
+<body>
+    <form action="change_result.html" method="POST">
+
+        メールアドレス：<input type="email" name="mail" placeholder="例：～.co.jp ～.com" value="{{result[1]}}" readonly><br>
+        　　　　　名前：<input type="text" name="name" placeholder="例：岩手太郎" maxlength="6" value="{{result[2]}}" readonly><br>
+        役職：<select name="job">
+            {% if result[5] == 5 %}
+            <option value="general">一般社員</option>
+            {% elif result[5] == 4 %}
+            <option value="chief">主任（上司）</option>
+            {% elif result[5] == 3 %}
+            <option value="director">部長</option>
+            {% elif result[5] == 2 %}
+            <option value="managing_director">常務取締役</option>
+            {% else %}
+            <option value="president">社長</option>
+            {% endif %}
+
+        </select><br>
+
+        直属の上司のメールアドレス：<input type="email" name="boss_mail" 　placeholder="例：～.jp　～.com" value="{{result[6]}}"><br>
+        所属部署：
+        {% if result[4] == 1 %}
+        <input type="text" name="department" placeholder="例：～(会社、企業名) ~部" value="営業部" readonly><br>
+        {% endif %}
+        {% if result[4] == 1 %}
+        <input type="text" name="department" placeholder="例：～(会社、企業名) ~部" value="開発部" readonly><br>
+        {% endif %}
+    </form>
+    <a href="{{url_for('show_account')}}"><button>戻る</button></a>
+    <form action="{{url_for('delete_account_complete')}}" method="post">
+        <input type="hidden" name="result" value="{{result}}">
+        <button>削除</button>
+    </form>
+
+</body>
+
+</html>

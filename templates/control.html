@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="con">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet"  href="../static/cont.css">
+        <title>アカウント管理画面</title>
+    </head>
+    <body>
+        <h3>アカウント管理画面</h3><br>
+        <form action="{{url_for('show_delete_account')}}" method="POST">
+            <p class="searchtext">検索<input class="input" type="text"><button class="search"  type="button">検索</button></p>
+        </form>
+        <a href="{{url_for('show_account')}}" class="btn">戻る</a>
+        <table>
+            <tr>
+                <th>氏名</th>
+                <th>役職</th>
+                <th>メールアドレス</th>
+                <th>上司のメールアドレス</th>
+            </tr>
+            {% for list in result %}
+            <tr>
+                <td>{{list[2]}}</td>
+                <td>{{list[4]}}</td>
+                <td>{{list[1]}}</td>
+                <td>{{list[6]}}</td>
+                <td><form action="{{url_for('show_delete_account')}}" method="post">
+                    <input type="submit" value="削除"> <input type="hidden" name="result" value="{{list}}">
+                </form></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

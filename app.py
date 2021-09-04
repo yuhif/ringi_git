@@ -17,19 +17,22 @@ def login_page():
 
 @app.route("/login", methods=["POST"])  #トップページ
 def login():
-    mail = request.form.get("mail")
-    pw = request.form.get("pw")
-    result = db.login(mail, pw)
-    if(result != "failure"):
-        session["user"] = result[0]  # user_idを入れる
-        session["mail"] = result[1]
-        #session["position"] = result[?]
-        session["auth"] = result[4]
-        session.permanent = True
-        app.permanent_session_lifetime = timedelta(minutes=30)
-        return redirect(url_for("top_page"))              #  トップページにリダイレクト 
+    mail = request.form.get("textmail")
+    pw = request.form.get("textpw")
+    if(pw != None):
+        result = db.login(mail, pw)
+        if(result != "failure"):
+            session["user"] = result[0]  # user_idを入れる
+            session["mail"] = result[1]
+            session["position"] = result[5]
+            session["auth"] = result[4]
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(minutes=30)
+            return redirect(url_for("top_page"))              #  トップページにリダイレクト 
+        else:
+            return redirect(url_for("login_page", error="パスワードかメールアドレスが違います。")) #失敗したとき
     else:
-        return redirect(url_for("login_page", error="パスワードかメールアドレスが違います。")) #失敗したとき
+        return redirect(url_for("login_page", error="パスワードかメールアドレスが違います。"))
 
 @app.route("/top") # トップページ
 def top_page():
@@ -79,7 +82,7 @@ def entry_complete():
         result = mail_sample.send_mail(mail, result)  # [result]にパスワードが入ってるから引数にしてメール処理に渡す
         return render_template("result.html", auth=auth)  # アカウント登録完了画面を表示する
     else:
-        if(auth == 1):
+        if(auth == "1"):
             return redirect(url_for("login_page", error="アカウント登録に失敗")) # 失敗した時ログインページにエラー付きで飛ぶ
         else:
             return redirect(url_for("show_account", error="アカウント登録失敗"))
@@ -87,7 +90,7 @@ def entry_complete():
 @app.route("/show_document")
 def show_document():
     if "user" in session:
-        return render_template("main2.html", position="")    # 稟議書一覧を開くためのメニューを表示、役職で表示異なる  
+        return render_template("main2.html", position=session["position"])    # 稟議書一覧を開くためのメニューを表示、役職で表示異なる  
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -109,29 +112,31 @@ def show_delete_account():
         name = request.args.get("name")
         result = db.select_account(name)           # DBからアカウント一覧を取得する(名前の部分一致OR全部)
         if(result != "failure"):
-            return render_template("account_kanri.html", result=result, error="")    # アカウントの一覧を表示(削除するアカウント)  
+            return render_template("control.html", result=result, error="")    # アカウントの一覧を表示(削除するアカウント)  
         else:
             return redirect(url_for("top_page", error="sqlエラー"))
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
-@app.route("/delete_account")
-def delete_accout():
+@app.route("/delete_account", methods=["POST"])
+def delete_account():
     if "user" in session:
-        result = request.args.get("result")
-        render_template("", result=result)  # アカウント削除確認画面を表示する
+        result = request.form.get("result")
+        return render_template("account_delete.html", result=result)  # アカウント削除確認画面を表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
-@app.route("/delete_account_complete")
+@app.route("/delete_account_complete", methods=["POST"])
 def delete_account_complete():
     if "user" in session:
-        mail = request.args.get("mail")
+        mail = request.form.get("mail")
+        print(mail)
+        print(mail)
         result = db.delete_account(mail)
         if(result != "failure"):
-            return render_template("")    # アカウント削除完了画面を表示する
+            return render_template("delete_result.html")    # アカウント削除完了画面を表示する
         else:
-            return render_template("", error="SQLエラー")  # エラー付きでメニューを表示    
+            return redirect(url_for("show_account", error="SQLエラー"))  # エラー付きでメニューを表示    
     else:    
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -142,9 +147,9 @@ def show_update_account():
         name = request.args.get("name")
         result = db.select_account(name)      # DBからアカウント一覧を取得する(名前の部分一致OR全部)
         if(result != "failure"):
-            return render_template("", result=result) # アカウントの一覧を表示(変更するアカウント)
+            return render_template("control.html", result=result) # アカウントの一覧を表示(変更するアカウント)
         else:
-            return render_template("", result="", error="sqlエラー")
+            return redirect(url_for("show_account", result="", error="sqlエラー"))
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -152,7 +157,7 @@ def show_update_account():
 def update_accout():
     if "user" in session():
         result = request.form.get("result")
-        return render_template("", result=result)  # 選択したアカウントを変更するページを表示する
+        return render_template("account_change.html", result=result)  # 選択したアカウントを変更するページを表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -168,9 +173,9 @@ def update_account_complete():
         error = request.args.get("error")
         result = db.accout_update(id, name, mail, position, superier_mail, department)  # resultにfailureかsuccessが返ってくる
         if(result != "failure"):
-            return render_template("")  # アカウント情報の変更完了画面を表示する
+            return render_template("change_result.html")  # アカウント情報の変更完了画面を表示する
         else:
-            return render_template("", error="更新失敗") # エラー付きアカウントメニュー画面を表示する 
+            return redirect(url_for("show_account", error="更新失敗")) # エラー付きアカウントメニュー画面を表示する 
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -185,34 +190,38 @@ def my_account():
 @app.route("/update_pw")
 def update_pw():
     if "user" in session:
-        return render_template("", error="")   # 「パスワードの変更」を押したときに表示するパスワード変更ページ
+        return render_template("main5.html", error="")   # 「パスワードの変更」を押したときに表示するパスワード変更ページ
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
 @app.route("/update_pw2", methods=["POST"])
 def update_pw2():
     if "user" in session:
-        pw = request.form.get("pw")
-        if(db.select_pw(session["user"], pw)):      # 前のパスワードがあっているか確認する(TrueかFalseが返ってくる)
-            return render_template("")            # 次のページを表示
+        pw = request.form.get("pw3")
+        if(pw != ""):
+            if(db.select_pw(session["user"], pw)):      # 前のパスワードがあっているか確認する(TrueかFalseが返ってくる)
+                return render_template("main6.html")            # 次のページを表示
+            else:
+                return redirect(url_for("update_pw", error="パスワードが違います"))  #  errorを表示して今のページを表示    
         else:
-            return render_template("", error="パスワードが違います")  #  errorを表示して今のページを表示    
+            return redirect(url_for("update_pw", error="パスワードが違います"))
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
 @app.route("/update_pw_complete", methods=["POST"])
 def update_pw_complete():
     if "user" in session:
-        pw = request.form.get("pw")         # 1回目のパスワード入力
-        confirm_pw = request.form.get("pw") # 2回目のパスワード入力
-        if(pw == confirm_pw):
-            result = db.update_pw(session["id"], pw)         # DBのパスワードを更新する
+        pw = request.form.get("pw5")       # 1回目のパスワード入力
+        confirm_pw = request.form.get("pw7") # 2回目のパスワード入力
+        if(pw == confirm_pw and pw != ""):
+            print(pw)
+            result = db.update_pw(session["user"], pw)         # DBのパスワードを更新する
             if(result != "failure"):
-                return render_template("")      # パスワード変更完了画面を表示
+                return render_template("main7.html")      # パスワード変更完了画面を表示
             else:
-                return render_template("", error="sqlエラー") # 同じ画面をエラー付きで表示
+                return redirect(url_for("update_pw", error="sqlエラー")) # 同じ画面をエラー付きで表示
         else:
-            return render_template("", error="同じパスワードが入力されていません")  # 同じ画面をエラー付きで表示する
+            return redirect(url_for("update_pw", error="同じパスワードが入力されていません"))  # 同じ画面をエラー付きで表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -226,7 +235,7 @@ def my_document():
         if(result != "failure"):
             return render_template("ringi_search.html", result=result)
         else:
-            return render_template("show_document", error="SQLエラー") # エラー付きでメニューを表示する
+            return redirect(url_for("show_document", error="SQLエラー")) # エラー付きでメニューを表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -238,7 +247,7 @@ def subordinate_document():
         if(result != "failure"):
             return render_template("ringi_search.html", result=result)
         else:
-            return render_template("show_document", error="SQLエラー")  # エラー付きでメニューを表示する
+            return redirect(url_for("show_document", error="SQLエラー"))  # エラー付きでメニューを表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -246,11 +255,11 @@ def subordinate_document():
 def show_approval():
     if "user" in session:
         doc_name = request.args.get("doc_name") # 検索する内容を取ってくる
-        result = db.show_approval(session["mail"], doc_name)
+        result = db.select_show_approval(session["user"], doc_name)
         if(result != "failure"):
             return render_template("ringi_search.html", result=result)
         else:
-            return render_template("show_document", error="SQLエラー")  # エラー付きでメニューを表示する
+            return redirect(url_for("show_document", error="SQLエラー"))  # エラー付きでメニューを表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 

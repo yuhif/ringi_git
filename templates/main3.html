@@ -21,7 +21,7 @@
         <a href="{{url_for('show_delete_account')}}"><button class="account_delete">アカウント削除</button></a>
         <a href="{{url_for('show_update_account')}}"><button class="account_information_change">アカウント情報変更</button></a>
         <form action="{{url_for('entry')}}" method="post" style="display: inline;">
-            <input type="submit" value="アカウント登録">
+            <button class="account_registration">アカウント登録</button>
             <input type="hidden" name="auth" value="0">
         </form>
         {% endif %}

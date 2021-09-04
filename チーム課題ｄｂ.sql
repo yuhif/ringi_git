@@ -21,7 +21,11 @@ create table official_position(
 );
 
 ・役職テーブルinsert文
-insert into official_position values(1,'部長');
+insert into official_position values(1,'社長');
+insert into official_position values(2,'常務取締役');
+insert into official_position values(3,'部長');
+insert into official_position values(4,'主任');
+insert into official_position values(5,'一般社員');
 
 
 利用者テーブル
@@ -89,7 +93,9 @@ create table approval_document(
 	
 	
 ・稟議書テーブルinsert文
-insert into approval_document values(2,1,"稟議書",sysdate(),"稟議内容です",100,400000,40000000,"理由です","コメントです",0,5,(任意の日付));
+insert into approval_document(user_id,document_name,application_date,contents,quaritity,price,total_payment,
+reason,comment,result,authorizer_id,preferred_day) 
+value(1,"稟議書",sysdate(),"稟議内容です",100,400000,40000000,"理由です","コメントです",0,5,(任意の日付));
 
 
 稟議書管理システム・セレクト文
@@ -111,7 +117,7 @@ insert into approval_document values(2,1,"稟議書",sysdate(),"稟議内容です",100,4
 
 承認テーブル
 create table approval(
-	approval_id integer(10) primay key auto_increment,
+	approval_id integer(10) primary key auto_increment,
 	user_id integer,
 	foreign key (user_id)
 	references user(user_id),

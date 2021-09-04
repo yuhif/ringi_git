@@ -37,9 +37,9 @@
     <!-- <button onclick="location.href='result.html'">登録</button>  -->
 
     {% if(auth == "1") %}
-    <a href="{{url_for('login_page')}}"><button class="button4">戻る</button></a>
+    <div class="modoru"><a href="{{url_for('login_page')}}"><button class="button4">戻る</button></a></div>
     {% else %}
-    <a href="{{url_for('show_account')}}"><button class="button4">戻る</button></a>
+    <div class="modoru"><a href="{{url_for('show_account')}}"><button class="button4">戻る</button></a></div>
     {% endif %}
 
 </fieldset>
