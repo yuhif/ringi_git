@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../static/style.css">
     <title>新規登録</title>
 </head>
-<body>
-    
-    <form action="account2.html" method="GET">
-    <fieldset>
-        <p>メールアドレス<br>
-        <input type="email" name="mail"></p> 
 
-        <p>パスワード<br>
-        <input type="password" name="pw"></p>
-        <button onclick="location.href='account2.html'">登録</button>   
-    </fieldset>
+<body>
+
+    <form action="account2.html" method="POST" class="to">
+        <h3>メールアドレス</h3><br>
+        <input type="email" name="mail">
+
+        <h3>パスワード</h3><br>
+        <input type="password" name="pw">
+        <button onclick="location.href='account2.html'">登録</button>
     </form>
 </body>
+
 </html>
