@@ -10,9 +10,11 @@
 </head>
 
 <body>
-    稟議書申請一覧<br>
-    検索：<input type="search" name="searchWord" pattern="^[ぁ-ん]+$ , [\u3041-\u309F]*" required>
-    <a href="{{url_for('show_document')}}"><input type="submit" value="戻る"></a>
+    稟議書申請一覧      <a href="{{url_for('show_document')}}"><input type="submit" value="戻る"></a><br>
+    <form action="{{url_for('show_approval')}}">
+    検索：<input type="text" name="doc_name">
+    <input type=submit value="検索"></form>
+
     <table border="1" class="t2">
         <tr class="one">
             <!-- <th>稟議書申請一覧</th> -->
@@ -29,12 +31,21 @@
         <tr>
             <td>{{list[0]}}</td>
             <td>{{list[2]}}</td>
-            <td>{{list[1]}}</td>
+            <td>{{list[13]}}</td>
             <td>{{list[3]}}</td>
             <td>{{list[9]}}</td>
             <td>{{list[12]}}</td>
-            <td>{{list[10]}}</td>
+            {% if list[10] == 1 %}
+            <td>承認</td>
             <td></td>
+            {% elif list[10] == 2 %}
+            <td>否決</td>
+            <td></td>
+            {% elif list[10] == 0 %}
+            <td>承認待ち</td>
+            <td></td>
+            {% endif %}
+
             
         </tr>
         {% endfor %}
