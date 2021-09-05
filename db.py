@@ -116,7 +116,7 @@ def update_pw(user_id, pw):
     conn.close()
     return "success"
     
-def accout_update(id, name, mail, position, superior_mail, department):
+def account_update(id, name, mail, position, superior_mail, department):
     conn = get_connection()
     cur = conn.cursor()
     sql = "update user set mail=%s,name=%s,position_id=%s,superior_mail=%s,department_id=%s where user_id=%s;"
@@ -225,11 +225,32 @@ def insert_document(id, doc_name, contents, quaritity, price, total_payment, rea
     return "success"
 
 def application(superior_id, document_id):  # 申請処理
+    search_app_date(document_id)
     conn = get_connection()
     cur = conn.cursor()
-    sql = "INSERT into approval(user_id,document_id) value(%s,%s)"    # approvalテーブルにインサートするsql
+    sql = "INSERT into approval(user_id,document_id) value(%s,%s);"    # approvalテーブルにインサートするsql
+    doc_up_sql = "UPDATE approval_document SET authorizer_id = %s WHERE document_id = %s;"
     try:
-        cur.execute()
+        cur.execute(sql, (superior_id, document_id))
+        cur.execute(doc_up_sql, (superior_id, document_id))
+    except Exception as e:
+        print("SQLの実行に失敗", e)
+        return "failure"
+    cur.close()
+    conn.commit()
+    conn.close()
+    return "success"
+
+def search_app_date(id):
+    conn = get_connection()
+    cur = conn.cursor()
+    sql = "SELECT application_date FROM approval_document WHERE document_id = %s"
+    up_sql = "UPDATE approval_document SET application_date = now(),result=0 WHERE document_id = %s"
+    try:
+        cur.execute(sql, (id, ))
+        date = cur.fetchone()
+        if date[0] == "null":
+            cur.execute(up_sql, (id, ))
     except Exception as e:
         print("SQLの実行に失敗", e)
         return "failure"
@@ -241,7 +262,71 @@ def application(superior_id, document_id):  # 申請処理
 def approval_prepare(superior_mail):
     conn = get_connection()
     cur = conn.cursor()
-    sql = ""
+
+def approval(document_id, superior_id, my_id): # 承認処理
+    conn = get_connection()
+    cur = conn.cursor()
+    appr_sql = "UPDATE approval SET approval_day=now(),result=1 WHERE document_id = %s AND user_id = %s;"
+    doc_sql = "UPDATE approval_document SET authorizer_id=%s WHERE document_id = %s;"
+    try:
+        cur.execute(appr_sql, (document_id, my_id, ))
+        cur.execute(doc_sql, (superior_id, document_id, ))
+        result = application(superior_id, document_id)
+        if result != "failure":
+            cur.close()
+            conn.commit()
+            conn.close()
+            return "success"
+    except Exception as e:
+        print("SQLの実行に失敗", e)
+    return "failure"
+
+def president_approval(document_id, my_id): # 社長の承認
+    conn = get_connection()
+    cur = conn.cursor()
+    select_sql = "SELECT user_id FROM user WHERE position_id = 5 LIMIT 1;"
+    try:
+        cur.execute(select_sql, ())
+        id = cur.fetchone()
+    except Exception as e:
+        print("SQLの実行に失敗", e)
+        return "failure"
+    appr_sql = "UPDATE approval SET approval_day=now(),result=1 WHERE document_id = %s AND user_id = %s;"
+    doc_sql = "UPDATE approval_document SET authorizer_id=%s,result=1 WHERE document_id = %s;"
+    try:
+        cur.execute(appr_sql, (document_id, my_id, ))
+        cur.execute(doc_sql, (id[0], document_id, ))
+        cur.close()
+        conn.commit()
+        conn.close()
+        return "success"
+    except Exception as e:
+        print("SQLの実行に失敗", e)
+        return "failure" 
+
+def rejection(document_id, my_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    select_sql = "SELECT user_id FROM user WHERE position_id = 5 LIMIT 1;"
+    try:
+        cur.execute(select_sql, ())
+        id = cur.fetchone()
+    except Exception as e:
+        print("SQLの実行に失敗", e)
+        return "failure"
+    appr_sql = "UPDATE approval SET approval_day=now(),result=2 WHERE document_id = %s AND user_id = %s;"
+    doc_sql = "UPDATE approval_document SET authorizer_id=%s,result=2 WHERE document_id = %s;"
+    try:
+        cur.execute(appr_sql, (document_id, my_id, ))
+        cur.execute(doc_sql, (id[0], document_id, ))
+        cur.close()
+        conn.commit()
+        conn.close()
+        return "success"
+    except Exception as e:
+        print("SQLの実行に失敗", e)
+        return "failure" 
+
 
 def select_superior_id(mail):
     conn = get_connection()

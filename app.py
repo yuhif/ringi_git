@@ -102,7 +102,6 @@ def show_account():
     if "user" in session:
         error = request.args.get("error")
         info = request.args.get("info")
-        print(session["auth"])
         return render_template("main3.html", auth=session["auth"], error=error, info=info)    # アカウントのメニューを表示,authによって表示異なる
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
@@ -135,7 +134,6 @@ def delete_account():
 def delete_account_complete():
     if "user" in session:
         mail = request.form.get("mail")
-        print(mail)
         result = db.delete_account(mail)
         if(result != "failure"):
             return render_template("delete_result.html")    # アカウント削除完了画面を表示する
@@ -149,7 +147,8 @@ def delete_account_complete():
 def show_update_account():
     if "user" in session:
         name = request.args.get("name")
-        result = db.select_account(name)      # DBからアカウント一覧を取得する(名前の部分一致OR全部)
+        result = db.select_account(name)     # DBからアカウント一覧を取得する(名前の部分一致OR全部)
+        print(result[0][4])
         if(result != "failure"):
             return render_template("control_change.html", result=result) # アカウントの一覧を表示(変更するアカウント)
         else:
@@ -166,21 +165,22 @@ def update_account():
         position = request.form.get("position")
         superior_mail = request.form.get("superior_mail")
         department = request.form.get("department")
-        return render_template("account_change.html",id=id, name=name, mail=mail, position=position, superier_mail=superior_mail, department=department)  # 選択したアカウントを変更するページを表示する
+        return render_template("account_change.html",id=id, name=name, mail=mail, position=position, superior_mail=superior_mail, department=department)  # 選択したアカウントを変更するページを表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
-@app.route("/update_account_complete")    # アカウントのアップデート
+@app.route("/update_account_complete", methods=["POST"])    # アカウントのアップデート
 def update_account_complete():
-    if "user" in session():
-        id = request.args.ger("id")
-        name = request.args.get("name")
-        mail = request.args.get("mail")
-        position = request.args.get("position")
-        superier_mail = request.args.get("superier_mail")
-        department = request.args.get("department")
-        error = request.args.get("error")
-        result = db.accout_update(id, name, mail, position, superier_mail, department)  # resultにfailureかsuccessが返ってくる
+    if "user" in session:
+        id = request.form.get("id")
+        name = request.form.get("name")
+        mail = request.form.get("mail")
+        position = request.form.get("position")
+        superior_mail = request.form.get("superior_mail")
+        department = request.form.get("department")
+        print(department)
+        error = request.form.get("error")
+        result = db.account_update(id, name, mail, position, superior_mail, department)  # resultにfailureかsuccessが返ってくる
         if(result != "failure"):
             return render_template("change_result.html")  # アカウント情報の変更完了画面を表示する
         else:
@@ -293,8 +293,9 @@ def comment_save():
 def comment_confirm():
     if "user" in session:
         result = request.args.get("result")
+        document_id = request.args.get("document_id")
         comment = request.args.get("comment")
-        # result = db.comment_edit(稟議書ID,コメント)  # 編集したコメントをアップデートする
+        result = db.comment_edit(document_id, comment)  # 編集したコメントをアップデートする
         if(result != "failure"):
             return render_template("")  #  コメント編集完了画面を表示する
         else:
@@ -310,25 +311,39 @@ def look_document():
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
-@app.route("/superier_approval")  # 自分に対しての申請一覧の編集を押したとき
-def superier_approval():
+@app.route("/superior_approval")  # 自分に対しての申請一覧の編集を押したとき
+def superior_approval():
     if "user" in session:
         result = request.args.get("result")
         return render_template("", result=result)   # 承認か否決する画面を表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
-@app.route("/superier_approval_complete")  # 承認か否決を押す画面で承認を押したとき
-def superier_approval_complete():
+@app.route("/superior_approval_complete")  # 承認か否決を押す画面で承認を押したとき
+def superior_approval_complete():
     if "user" in session:
-        return render_template("")   # 承認完了画面を表示する
+        doc_id = request.args.get("document_id")
+        if session["superior_mail"] != "null":
+            superior_id = db.select_superior_id(session["superior_mail"])
+            result = db.approval(doc_id, superior_id[0], session["user"])    
+        else:
+            result = db.president_approval(doc_id, session["user"])  # 社長の承認
+        if result != "failure":
+            return render_template("")   # 承認完了画面を表示する
+        else:
+            return redirect(url_for('show_document', error="SQLエラー")) # エラーでメニュー表示
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
     
-@app.route("/superier_rejection_complete")  # 承認か否決を押す画面で否決を押したとき
-def superier_rejection_complete():
+@app.route("/superior_rejection_complete")  # 承認か否決を押す画面で否決を押したとき
+def superior_rejection_complete():
     if "user" in session:
-        return render_template("")   # 否決完了画面を表示する
+        document_id = request.args.get("document_id")
+        result = db.rejection(document_id, session["user"])
+        if result != "failure":
+            return render_template("")   # 否決完了画面を表示する
+        else:
+            return redirect(url_for("show_document", error="SQLエラー"))
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -355,7 +370,7 @@ def insert_document():
         result1 = db.insert_document(session["user"], doc_name, contents, quaritity, price, total_payment, reason, comment, preferred_day) # 稟議書をインサートするdb処理　failureかsuccessが返ってくる
         document_id = db.select_document_id_first(session["user"])
         if(result1 != "failure"):
-            return redirect(url_for("application",document_id=document_id, doc_name=doc_name, app_date=app_date, contents=contents, quaritity=quaritity, price=price, total_payment=total_payment, reason=reason, comment=comment, result=result, preferred_day=preferred_day)) # 稟議書を申請する画面に飛ばすURLにとばす
+            return redirect(url_for("application",document_id=document_id, doc_name=doc_name, contents=contents, quaritity=quaritity, price=price, total_payment=total_payment, reason=reason, comment=comment, preferred_day=preferred_day)) # 稟議書を申請する画面に飛ばすURLにとばす
         else:
             return redirect(url_for("show_document", error="保存に失敗しました。"))  # メニューにエラー付きで飛ばす
     else:
@@ -374,7 +389,7 @@ def application():
         comment = request.args.get("comment")
         result = request.args.get("result")
         preferred_day = request.args.get("preferred_day")    
-        return render_template("",document_id=document_id, doc_name=doc_name, app_date=app_date, contents=contents, quaritity=quaritity, price=price, total_payment=total_payment, reason=reason, comment=comment, result=result, preferred_day=preferred_day)   # 稟議書を申請する画面に飛ばす
+        return render_template("",document_id=document_id, doc_name=doc_name, contents=contents, quaritity=quaritity, price=price, total_payment=total_payment, reason=reason, comment=comment, result=result, preferred_day=preferred_day)   # 稟議書を申請する画面に飛ばす
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -384,10 +399,10 @@ def application_complete():
         document_id = request.args.get("document_id")
         result = request.args.get("result") 
         superior_id = db.select_superior_id(session["superior_mail"])
-        if(superior_id != "null"):
-            result = db.application(superior_id, document_id)  # approval_documentテーブルの承認者IDを更新してapprovalテーブルをインサートする
+        if(superior_id != "failure"):
+            result = db.application(superior_id[0], document_id)  # approval_documentテーブルの承認者IDを更新してapprovalテーブルをインサートする
         else:
-            result = db.application("null", document_id)  # superior_idのところを"null"に
+            return redirect(url_for("show_document", error="SQLエラー")) 
         if(result != "failure"):
             mail_input.send_mail(session["superier_mail"])   # 申請したと報告するメールを上司に送る
             return render_template("")   # 申請完了ページを表示する

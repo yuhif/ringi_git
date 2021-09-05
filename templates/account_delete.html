@@ -16,13 +16,13 @@
         メールアドレス：<input type="email" name="mail" placeholder="例：～.co.jp ～.com" value="{{mail}}" readonly><br>
         　　　　　名前：<input type="text" name="name" placeholder="例：岩手太郎" maxlength="6" value="{{name}}" readonly><br>
         役職：<select name="job">
-            {% if position == 5 %}
+            {% if position == "5" %}
             <option value="general">一般社員</option>
-            {% elif position == 4 %}
+            {% elif position == "4" %}
             <option value="chief">主任（上司）</option>
-            {% elif position == 3 %}
+            {% elif position == "3" %}
             <option value="director">部長</option>
-            {% elif position == 2 %}
+            {% elif position == "2" %}
             <option value="managing_director">常務取締役</option>
             {% else %}
             <option value="president">社長</option>
@@ -30,12 +30,12 @@
 
         </select><br>
 
-        直属の上司のメールアドレス：<input type="email" name="boss_mail" 　placeholder="例：～.jp　～.com" value="{{superior_mail}}"><br>
+        直属の上司のメールアドレス：<input type="email" name="boss_mail" 　placeholder="例：～.jp　～.com" value="{{superior_mail}}" readonly><br>
         所属部署：<select name="department">
-        {% if department == 1 %}
-        <option value="営業部"></option>
+        {% if department == "1" %}
+        <option value="営業部">営業部</option>
         {% else %}
-        <option value="開発部"></option>
+        <option value="開発部">開発部</option>
         {% endif %}
             </select>
     <a href="{{url_for('show_account')}}"><button>戻る</button></a>
