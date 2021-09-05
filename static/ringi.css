@@ -6,6 +6,13 @@
 
 .title{
     position: absolute;
+    top: 0%;
+    left: 0%;
+    font-size: 25px;
+}
+
+.title2{
+    position: absolute;
     top: 5%;
     left: 30%;
     font-size: 50px;
@@ -161,7 +168,7 @@
 }
 
 .box{
-    padding: 1200px 1190px;
+    padding: 350px 300px;
     border: solid 1px white;
     background-color: gainsboro;
 }

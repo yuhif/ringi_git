@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/paper2.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="layout">
+        <p class="title">稟議書申請</p>
+        <p class="approval">稟議書名:</p>
+        <input type="text" class="textapproval" name="textmail">
+        <p class="manager">担当者名:</p>
+        <input type="text" class="textmanager" name="textmanager">
+        <p class="applicationdate">投稿日:</p>
+        <input type="date" class="textapplicationdate" name="textapplicationdate">
+        <p class="department">部署名:</p>
+        <input type="text" class="textdepartment" name="textdepartment">
+        <p class="number">数量:</p>
+        <input type="number" class="textnumber" name="number" value="1" min="1" step="1">
+        <p class="payment">支払単価:</p>
+        <input type="text" class="textpayment" name="textpayment">
+        <p class="content">必要理由:</p>
+        <textarea name="textcontent" class="textcontent" cols="30" rows="10"></textarea>
+        <p class="trader">業者選定理由:</p>
+        <textarea name="texttrader" class="texttrader" cols="30" rows="10"></textarea>
+        <button class="back">戻る</button>
+        <button class="create">作成</button>
+    </div>
+</body>
+</html>
