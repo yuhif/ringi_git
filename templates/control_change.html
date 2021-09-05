@@ -24,12 +24,13 @@
                 <td>{{list[4]}}</td>
                 <td>{{list[1]}}</td>
                 <td>{{list[6]}}</td>
-                <td><form action="{{url_for('delete_account')}}" method="post">
-                    <input type="submit" value="削除"> <input type="hidden" name="mail" value="{{list[1]}}">
+                <td><form action="{{url_for('update_account')}}" method="post">
+                    <input type="submit" value="変更"> <input type="hidden" name="mail" value="{{list[1]}}">
                     <input type="hidden" name="name" value="{{list[2]}}">
                     <input type="hidden" name="position" value="{{list[5]}}">
                     <input type="hidden" name="superior_mail" value="{{list[6]}}">
                     <input type="hidden" name="department" value="{{list[4]}}">
+                    <input type="hidden" name="id" value="{{list[0]}}">
                 </form></td>
             </tr>
             {% endfor %}

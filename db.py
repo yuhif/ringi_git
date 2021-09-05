@@ -7,7 +7,7 @@ from MySQLdb import connections
 def get_connection():
     return MySQLdb.connect(user="root", passwd="jyobi2001", host="localhost", db="Approval_management", charset="utf8")
 
-def entry(name, mail, department_id, position_id, superier_mail, auth):
+def entry(name, mail, department_id, position_id, superior_mail, auth):
     randlist = [random.choice(string.ascii_letters + string.digits) for i in range(20)]
     salt = ''.join(randlist)
     randlist = [random.choice(string.ascii_letters + string.digits) for i in range(20)]
@@ -23,7 +23,7 @@ def entry(name, mail, department_id, position_id, superier_mail, auth):
     cur = conn.cursor()
     sql = "INSERT INTO user VALUES(0, %s, %s, %s, %s, %s, %s, %s, %s);"
     try:
-        cur.execute(sql, (mail, name, hashed_pw, department_id, position_id, superier_mail, salt, auth))
+        cur.execute(sql, (mail, name, hashed_pw, department_id, position_id, superior_mail, salt, auth))
         cur.close()
         conn.commit()
         conn.close()
@@ -35,7 +35,7 @@ def entry(name, mail, department_id, position_id, superier_mail, auth):
 def login(mail, pw):
     conn = get_connection()
     cur = conn.cursor()
-    sql = "SELECT user_id,mail,password,salt,auth,position_id FROM user WHERE mail = %s;" # 役職も
+    sql = "SELECT user_id,mail,password,salt,auth,position_id,superior_mail FROM user WHERE mail = %s;" # 役職も
     try:
         cur.execute(sql, (mail, ))
         result = cur.fetchone()
@@ -116,12 +116,12 @@ def update_pw(user_id, pw):
     conn.close()
     return "success"
     
-def accout_update(id, name, mail, position, superier_mail, department):
+def accout_update(id, name, mail, position, superior_mail, department):
     conn = get_connection()
     cur = conn.cursor()
     sql = "update user set mail=%s,name=%s,position_id=%s,superior_mail=%s,department_id=%s where user_id=%s;"
     try:
-        cur.execute()
+        cur.execute(sql, (mail, name, position, superior_mail, department, id))
     except Exception as e:
         print("SQLの実行に失敗", e)
         return "failure"
@@ -132,9 +132,13 @@ def accout_update(id, name, mail, position, superier_mail, department):
     
 def select_my_document(user_id, status):
     if status == "null" or status == None:
-        sql = "SELECT * FROM approval_document where user_id=%s;"  # 自分の稟議申請一覧を取ってくるsql(全部)
+        sql = """SELECT document_id,approval_document.user_id,document_name,application_date,contents,quaritity,
+        price,total_payment,reason,comment,result,authorizer_id,preferred_day,user.name 
+        FROM approval_document JOIN user ON approval_document.user_id = user.user_id where approval_document.user_id=%s;"""  # 自分の稟議申請一覧を取ってくるsql(全部)
     else:
-        sql = "SELECT * FROM approval_document where result=%s and user_id=%s;"  # 自分の稟議申請一覧を取ってくるsql(statusでwhereをつかう)
+        sql = """SELECT document_id,approval_document.user_id,document_name,application_date,contents,quaritity,
+        price,total_payment,reason,comment,result,authorizer_id,preferred_day,user.name 
+        FROM approval_document JOIN user ON approval_document.user_id = user.user_id where result=%s and approval_document.user_id=%s;"""  # 自分の稟議申請一覧を取ってくるsql(statusでwhereをつかう)
     conn = get_connection()
     cur = conn.cursor()
     try:
@@ -150,19 +154,25 @@ def select_my_document(user_id, status):
     conn.close()
     return result
 
-def select_subordinate_document(mail, doc_name):
+def select_subordinate_document(id, doc_name):
     if doc_name == "null" or doc_name == None:
-        sql = "SELECT * FROM approval_document  WHERE user_id IN (SELECT DISTINCT(user_id) FROM user WHERE superior_mail = %s);" # 部下の稟議申請一覧を持ってくるsql（全部）（）内は自分のuser_id
+        sql = """SELECT document_id,approval_document.user_id,document_name,application_date,contents,quaritity,
+        price,total_payment,reason,comment,result,authorizer_id,preferred_day,user.name 
+        FROM approval_document JOIN user ON approval_document.user_id = user.user_id 
+        WHERE document_id IN (SELECT document_id FROM approval WHERE user_id = %s);"""   # 部下の稟議申請一覧を持ってくるsql（全部）（）内は自分のuser_id
     else:
         doc_name = "%" + doc_name + "%"
-        sql = "SELECT * FROM approval_document where document_name like %s and user_id IN (SELECT DISTINCT(user_id) FROM user WHERE superior_mail = %s);" # 部下の稟議申請一覧を持ってくるsql（稟議書名・申請者名の部分一致)
+        sql = """SELECT document_id,approval_document.user_id,document_name,application_date,contents,quaritity,
+        price,total_payment,reason,comment,result,authorizer_id,preferred_day,user.name 
+        FROM approval_document JOIN user ON approval_document.user_id = user.user_id 
+        where (document_name like %s OR user.name like %s) AND document_id IN (SELECT document_id FROM approval WHERE user_id = %s);""" # 部下の稟議申請一覧を持ってくるsql（稟議書名・申請者名の部分一致)
     conn = get_connection()
     cur = conn.cursor()
     try:
         if doc_name == "null" or doc_name == None:
-            cur.execute(sql, (mail, ))
+            cur.execute(sql, (id, ))
         else:
-            cur.execute(sql, (doc_name, mail))
+            cur.execute(sql, (doc_name, doc_name, id))
         result = cur.fetchall()
     except Exception as e:
         print("SQLの実行に失敗", e)
@@ -173,17 +183,23 @@ def select_subordinate_document(mail, doc_name):
 
 def select_show_approval(id, doc_name):
     if doc_name == "null" or doc_name == None:
-        sql = "SELECT * FROM approval_document where authorizer_id = %s;" # 自分に対してきた申請一覧を持ってくるsql（全部）()内は自分のuser_id
+        sql = """SELECT document_id,approval_document.user_id,document_name,application_date,contents,quaritity,
+        price,total_payment,reason,comment,result,authorizer_id,preferred_day,user.name 
+        FROM approval_document JOIN user ON approval_document.user_id = user.user_id 
+        WHERE authorizer_id = %s;""" # 自分に対してきた申請一覧を持ってくるsql（全部）()内は自分のuser_id
     else:
         doc_name = "%" + doc_name + "%"
-        sql = "SELECT * FROM approval_document where document_name=%d AND authorizer_id = %s;" # 自分に対してきた申請一覧を持ってくるsql（稟議書名・申請者名の部分一致)
+        sql = """SELECT document_id,approval_document.user_id,document_name,application_date,contents,quaritity,
+        price,total_payment,reason,comment,result,authorizer_id,preferred_day,user.name 
+        FROM approval_document JOIN user ON approval_document.user_id = user.user_id 
+        WHERE (document_name LIKE %s OR user.name LIKE %s) AND authorizer_id = %s;""" # 自分に対してきた申請一覧を持ってくるsql（稟議書名・申請者名の部分一致)
     conn = get_connection()
     cur = conn.cursor()
     try:
         if doc_name == "null" or doc_name == None:
             cur.execute(sql, (id,))
         else:
-            cur.execute(sql, (doc_name, id, ))
+            cur.execute(sql, (doc_name, doc_name, id, ))
         result = cur.fetchall()
     except Exception as e:
         print("SQLの実行に失敗", e)
@@ -192,10 +208,12 @@ def select_show_approval(id, doc_name):
     conn.close()
     return result
 
-def insert_document():   # 新規稟議書のインサート
+def insert_document(id, doc_name, contents, quaritity, price, total_payment, reason, comment, preferred_day):   # 新規稟議書のインサート
     conn = get_connection()
     cur = conn.cursor()
-    sql = "INSERT into approval_document values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+    sql = """INSERT into approval_document(user_id, document_name,application_date,contents,
+    quaritity,price,total_payment,reason,comment,result,authorizer_id,preferred_day) 
+    value(%s,%s,null,%s,%s,%s,%s,%s,%s,3,0,%s) """
     try:
         cur.execute(sql,( ))
     except Exception as e:
@@ -206,10 +224,10 @@ def insert_document():   # 新規稟議書のインサート
     conn.close()
     return "success"
 
-def approval():  # 申請処理
+def application(superior_id, document_id):  # 申請処理
     conn = get_connection()
     cur = conn.cursor()
-    sql = "INSERT into approval values(%s,%s,%s,%s,%s,%s,%s,%s,%s)"    # approvalテーブルにインサートするsql
+    sql = "INSERT into approval(user_id,document_id) value(%s,%s)"    # approvalテーブルにインサートするsql
     try:
         cur.execute()
     except Exception as e:
@@ -220,32 +238,56 @@ def approval():  # 申請処理
     conn.close()
     return "success"
 
-def select_superier_mail(user_id):
+def approval_prepare(superior_mail):
     conn = get_connection()
     cur = conn.cursor()
-    sql = "SELECT mail FROM user where user_id=%s;"   # 上司のメールアドレスを取ってくるsql
+    sql = ""
+
+def select_superior_id(mail):
+    conn = get_connection()
+    cur = conn.cursor()
+    sql = "SELECT user_id FROM user where mail=%s;"   # 上司のidを取ってくるsql
     try:
-        cur.execute()
-        superier_mail = cur.fetchone()
+        cur.execute(sql, (mail, ))
+        superier_id = cur.fetchone()
     except Exception as e:
         print("SQLの実行に失敗", e)
         return "failure"
     cur.close()
     conn.close()
-    return superier_mail
+    return superier_id
 
-def comment_edit(id, comment):
-
+def select_document_id_first(user_id):
     conn = get_connection()
     cur = conn.cursor()
-    sql = "update approval_document set comment=comment where document_id=%s;"
+    sql = "SELECT document_id FROM approval_document WHERE user_id = %s ORDER BY application_date DESC LIMIT 1;"
+    try:
+        cur.execute(sql, (user_id, ))
+        document_id = cur.fetchone()
+    except Exception as e:
+        print("SQLの実行に失敗", e)
+        return "failure"
+    cur.close()
+    conn.close()
+    return document_id[0]
 
-    pass
+def comment_edit(id, comment):
+    conn = get_connection()
+    cur = conn.cursor()
+    sql = "update approval_document set comment=%s where document_id=%s;"
+    try:
+        cur.execute(sql, (comment, id, ))
+        cur.close()
+        conn.commit()
+        conn.close()
+        return "success"
+    except Exception as e:
+        print("SQLの実行に失敗", e)
+        return "failure"
 
 def delete_account(mail):
     conn = get_connection()
     cur = conn.cursor()
-    print(mail)
     sql = "DELETE FROM user WHERE mail = %s"
     try:
         cur.execute(sql, (mail, ))
