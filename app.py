@@ -66,7 +66,7 @@ def entry_confirm():
     name = request.form.get("name")
     mail = request.form.get("mail")
     position = request.form.get("position")
-    if position != 1:
+    if position != "1":
         superior_mail = request.form.get("superier_mail")
     else:
         superior_mail = ""
