@@ -66,20 +66,23 @@ def entry_confirm():
     name = request.form.get("name")
     mail = request.form.get("mail")
     position = request.form.get("position")
-    superier_mail = request.form.get("superier_mail")
+    if position != 1:
+        superior_mail = request.form.get("superier_mail")
+    else:
+        superior_mail = ""
     department = request.form.get("department")
     auth = request.form.get("auth")
-    return render_template("account_confirm.html", name=name, mail=mail, position=position, superier_mail=superier_mail, department=department, auth=auth)
+    return render_template("account_confirm.html", name=name, mail=mail, position=position, superior_mail=superior_mail, department=department, auth=auth)
 
 @app.route("/entry_complete", methods=["POST"]) # アカウント登録完了画面の表示とDB更新とメール送信
 def entry_complete():
     name = request.form.get("name")
     mail = request.form.get("mail")
     position = request.form.get("position")
-    superier_mail = request.form.get("superier_mail")
+    superior_mail = request.form.get("superior_mail")
     department = request.form.get("department")
     auth = request.form.get("auth")
-    result = db.entry(name, mail, department, position, superier_mail, auth)
+    result = db.entry(name, mail, department, position, superior_mail, auth)
     if (result != "failure"):
         result = mail_sample.send_mail(mail, result)  # [result]にパスワードが入ってるから引数にしてメール処理に渡す
         return render_template("result.html", auth=auth)  # アカウント登録完了画面を表示する
