@@ -25,7 +25,7 @@
         <option value="1" selected>社長</option>
         {% endif %}
     </select><br>
-    直属の上司のメールアドレス：<input type="text" name="superier_mail" placeholder="例：~.jp,~.com" value="{{superier_mail}}"><br>
+    直属の上司のメールアドレス：<input type="text" name="superior_mail" placeholder="例：~.jp,~.com" value="{{superior_mail}}" readonly><br>
     所属部署：<select name="department" readonly>
         {% if(department == "1") %}
         <option value="1" selected>営業部</option>
