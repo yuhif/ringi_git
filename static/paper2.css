@@ -1,0 +1,292 @@
+.layout{
+    position: absolute;
+    height: 1200px;
+    width: 1190px;
+}
+
+.title{
+    position: absolute;
+    top: 5%;
+    left: 40%;
+    font-size: 50px;
+}
+
+.approval{
+    position: absolute;
+    top: 25%; 
+    left: 25%;
+    font-size: 20px;
+}
+
+.textapproval{
+    position: absolute;
+    top: 25%; 
+    left: 35%;
+    width: 550px;
+    height: 40px;
+}
+
+.manager{
+    position: absolute;
+    top: 30%; 
+    left: 25%;
+    font-size: 20px;
+}
+
+.textmanager{
+    position: absolute;
+    top: 30%; 
+    left: 35%;
+    width: 550px;
+    height: 40px;
+}
+
+.applicationdate{
+    position: absolute;
+    top: 35%; 
+    left: 25%;
+    font-size: 20px;
+}
+
+.textapplicationdate{
+    position: absolute;
+    top: 37%; 
+    left: 35%;
+}
+
+.department{
+    position: absolute;
+    top: 42%; 
+    left: 25%;
+    font-size: 20px;
+}
+
+.textdepartment{
+    position: absolute;
+    top: 42%; 
+    left: 35%;
+    width: 550px;
+    height: 40px;
+}
+
+.number{
+    position: absolute;
+    top: 46%; 
+    left: 25%;
+    font-size: 20px;
+}
+
+.textnumber{
+    position: absolute;
+    top: 48%; 
+    left: 35%;
+}
+
+.payment{
+    position: absolute;
+    top: 52%; 
+    left: 25%;
+    font-size: 20px;
+}
+
+.textpayment{
+    position: absolute;
+    top: 52%; 
+    left: 35%;
+    width: 550px;
+    height: 40px;
+}
+
+.content{
+    position: absolute;
+    top: 57%; 
+    left: 25%;
+    font-size: 20px;
+}
+
+.textcontent{
+    position: absolute;
+    top: 57%; 
+    left: 35%;
+    width: 550px;
+    height: 140px;
+    line-height: 1.5;
+}
+
+.trader{
+    position: absolute;
+    top: 75%; 
+    left: 25%;
+    font-size: 15px;
+}
+
+.texttrader{
+    position: absolute;
+    top: 75%; 
+    left: 35%;
+    width: 550px;
+    height: 100px;
+    line-height: 1.5;
+}
+
+.back{
+    position: absolute;
+    top: 90%;
+    left: 20%;
+    width: 200px;
+    height: 50px;
+    font-size: 40px;
+    text-align: center;
+    border-radius:100px;
+}
+
+.create{
+    position: absolute;
+    top: 90%;
+    left: 70%;
+    width: 200px;
+    height: 50px;
+    font-size: 40px;
+    text-align: center;
+    border-radius:100px;
+}
+
+.department2{
+    position: absolute;
+    top: 40%; 
+    left: 25%;
+    font-size: 20px;
+}
+
+.number2{
+    position: absolute;
+    top: 45%; 
+    left: 25%;
+    font-size: 20px;
+}
+
+.payment2{
+    position: absolute;
+    top: 50%; 
+    left: 25%;
+    font-size: 20px;
+}
+
+.content2{
+    position: absolute;
+    top: 55%; 
+    left: 25%;
+    font-size: 20px;
+}
+
+.trader2{
+    position: absolute;
+    top: 60%; 
+    left: 25%;
+    font-size: 15px;
+}
+
+.comment{
+    position: absolute;
+    top: 65%; 
+    left: 25%;
+    font-size: 20px;
+}
+
+.back2{
+    position: absolute;
+    top: 75%;
+    left: 20%;
+    width: 200px;
+    height: 50px;
+    font-size: 40px;
+    text-align: center;
+    border-radius:100px;
+}
+
+.request{
+    position: absolute;
+    top: 88%;
+    left: 40%;
+    font-size: 30px;
+    font: bold;
+}
+
+.request_button{
+    position: absolute;
+    top: 90%;
+    left: 70%;
+    width: 200px;
+    height: 50px;
+    font-size: 40px;
+    text-align: center;
+    border-radius:100px;
+}
+
+.veto{
+    position: absolute;
+    top: 75%;
+    left: 45%;
+    width: 200px;
+    height: 50px;
+    font-size: 40px;
+    text-align: center;
+    border-radius:100px;
+}
+
+.approval_button{
+    position: absolute;
+    top: 75%;
+    left: 70%;
+    width: 200px;
+    height: 50px;
+    font-size: 40px;
+    text-align: center;
+    border-radius:100px;
+}
+
+.textcomment{
+    position: absolute;
+    top: 82%; 
+    left: 35%;
+    width: 550px;
+    height: 100px;
+    line-height: 1.5;
+}
+
+.back3{
+    position: absolute;
+    top: 95%;
+    left: 20%;
+    width: 200px;
+    height: 50px;
+    font-size: 40px;
+    text-align: center;
+    border-radius:100px;
+}
+
+.keep_button{
+    position: absolute;
+    top: 95%;
+    left: 70%;
+    width: 200px;
+    height: 50px;
+    font-size: 40px;
+    text-align: center;
+    border-radius:100px;
+}
+
+.comment2{
+    position: absolute;
+    top: 80%; 
+    left: 25%;
+    font-size: 20px;
+}
+
+.keep{
+    position: absolute;
+    top: 93%; 
+    left: 42%;
+    font-size: 25px;
+    font: bold;
+}
