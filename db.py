@@ -10,7 +10,8 @@ def get_connection():
 def entry(name, mail, department_id, position_id, superior_mail, auth):
     randlist = [random.choice(string.ascii_letters + string.digits) for i in range(20)]
     salt = ''.join(randlist)
-    randlist = [random.choice(string.ascii_letters + string.digits) for i in range(20)]
+    randlist = ""
+    randlist = [random.choice(string.ascii_letters + string.digits) for i in range(7)]
     pw = ''.join(randlist)
     b_pw = bytes(pw, "utf-8")
     b_salt = bytes(salt, "utf-8")
@@ -35,7 +36,7 @@ def entry(name, mail, department_id, position_id, superior_mail, auth):
 def login(mail, pw):
     conn = get_connection()
     cur = conn.cursor()
-    sql = "SELECT user_id,mail,password,salt,auth,position_id,superior_mail FROM user WHERE mail = %s;" # 役職も
+    sql = "SELECT user_id,mail,password,salt,auth,position_id,superior_mail,name FROM user WHERE mail = %s;" # 役職も
     try:
         cur.execute(sql, (mail, ))
         result = cur.fetchone()
@@ -56,11 +57,11 @@ def select_account(name):   # アカウントの一覧を取得する
         sql = "SELECT * FROM user;"        # nameを使った部分一致
     else:
         name = "%" + name + "%"
-        sql = "SELECT * FROM user where name=%s;" # 引数nameが空の場合のsql
+        sql = "SELECT * FROM user where name LIKE %s;" # 引数nameが空の場合のsql
     conn = get_connection()
     cur = conn.cursor()
     try:
-        if name == "null" or name == None:
+        if name == "" or name == None:
             cur.execute(sql, )
         else:
             cur.execute(sql, (name, ))
@@ -211,11 +212,18 @@ def select_show_approval(id, doc_name):
 def insert_document(id, doc_name, contents, quaritity, price, total_payment, reason, comment, preferred_day):   # 新規稟議書のインサート
     conn = get_connection()
     cur = conn.cursor()
+    select_sql = "SELECT user_id FROM user WHERE position_id = 5 LIMIT 1;"
+    try:
+        cur.execute(select_sql, ())
+        id2 = cur.fetchone()
+    except Exception as e:
+        print("SQLの実行に失敗", e)
+        return "failure"
     sql = """INSERT into approval_document(user_id, document_name,application_date,contents,
     quaritity,price,total_payment,reason,comment,result,authorizer_id,preferred_day) 
-    value(%s,%s,null,%s,%s,%s,%s,%s,%s,3,0,%s) """
+    value(%s,%s,null,%s,%s,%s,%s,%s,"",3,%s,%s) """
     try:
-        cur.execute(sql,( ))
+        cur.execute(sql,(id, doc_name, contents, quaritity, price, total_payment, reason, id2[0], preferred_day, ))
     except Exception as e:
         print("SQLの実行に失敗", e)
         return "failure"
@@ -224,8 +232,23 @@ def insert_document(id, doc_name, contents, quaritity, price, total_payment, rea
     conn.close()
     return "success"
 
-def application(superior_id, document_id):  # 申請処理
-    search_app_date(document_id)
+def update_document(doc_id, doc_name, contents, quaritity, price, total_payment, reason, preferred_day):
+    conn = get_connection()
+    cur = conn.cursor()
+    sql = "UPDATE approval_document SET document_name=%s,contents=%s,quaritity=%s,price=%s,total_payment=%s,reason=%s,preferred_day=%s WHERE document_id=%s;"
+    try:
+        cur.execute(sql, (doc_name, contents, quaritity, price, total_payment, reason, preferred_day, doc_id, ))
+        cur.close()
+        conn.commit()
+        conn.close()
+        return "success"
+    except Exception as e:
+        print("SQLの実行に失敗", e)
+        return "failure"
+
+def application(superior_id, document_id, flag):  # 申請処理
+    if flag != 1:
+        search_app_date(document_id)
     conn = get_connection()
     cur = conn.cursor()
     sql = "INSERT into approval(user_id,document_id) value(%s,%s);"    # approvalテーブルにインサートするsql
@@ -249,7 +272,7 @@ def search_app_date(id):
     try:
         cur.execute(sql, (id, ))
         date = cur.fetchone()
-        if date[0] == "null":
+        if date[0] == None:
             cur.execute(up_sql, (id, ))
     except Exception as e:
         print("SQLの実行に失敗", e)
@@ -259,24 +282,22 @@ def search_app_date(id):
     conn.close()
     return "success"
 
-def approval_prepare(superior_mail):
-    conn = get_connection()
-    cur = conn.cursor()
-
 def approval(document_id, superior_id, my_id): # 承認処理
     conn = get_connection()
     cur = conn.cursor()
+    sql = "INSERT into approval(user_id,document_id) value(%s,%s);"
     appr_sql = "UPDATE approval SET approval_day=now(),result=1 WHERE document_id = %s AND user_id = %s;"
     doc_sql = "UPDATE approval_document SET authorizer_id=%s WHERE document_id = %s;"
     try:
         cur.execute(appr_sql, (document_id, my_id, ))
         cur.execute(doc_sql, (superior_id, document_id, ))
-        result = application(superior_id, document_id)
-        if result != "failure":
-            cur.close()
-            conn.commit()
-            conn.close()
-            return "success"
+        # result = application(superior_id, document_id, 1)
+        # if result != "failure":
+        cur.execute(sql, (superior_id, document_id, ))
+        cur.close()
+        conn.commit()
+        conn.close()
+        return "success"
     except Exception as e:
         print("SQLの実行に失敗", e)
     return "failure"
@@ -334,18 +355,19 @@ def select_superior_id(mail):
     sql = "SELECT user_id FROM user where mail=%s;"   # 上司のidを取ってくるsql
     try:
         cur.execute(sql, (mail, ))
-        superier_id = cur.fetchone()
+        superior_id = cur.fetchone()
+        print(superior_id[0])
     except Exception as e:
         print("SQLの実行に失敗", e)
         return "failure"
     cur.close()
     conn.close()
-    return superier_id
+    return superior_id
 
 def select_document_id_first(user_id):
     conn = get_connection()
     cur = conn.cursor()
-    sql = "SELECT document_id FROM approval_document WHERE user_id = %s ORDER BY application_date DESC LIMIT 1;"
+    sql = "SELECT document_id FROM approval_document WHERE user_id = %s ORDER BY document_id DESC LIMIT 1;"
     try:
         cur.execute(sql, (user_id, ))
         document_id = cur.fetchone()
@@ -359,6 +381,7 @@ def select_document_id_first(user_id):
 def comment_edit(id, comment):
     conn = get_connection()
     cur = conn.cursor()
+    print(id, comment)
     sql = "update approval_document set comment=%s where document_id=%s;"
     try:
         cur.execute(sql, (comment, id, ))

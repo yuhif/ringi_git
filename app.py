@@ -27,6 +27,7 @@ def login():
             session["position"] = result[5]
             session["auth"] = result[4]
             session["superior_mail"] = result[6]
+            session["name"] = result[7]
             session.permanent = True
             app.permanent_session_lifetime = timedelta(minutes=30)
             return redirect(url_for("top_page"))              #  トップページにリダイレクト 
@@ -148,7 +149,6 @@ def show_update_account():
     if "user" in session:
         name = request.args.get("name")
         result = db.select_account(name)     # DBからアカウント一覧を取得する(名前の部分一致OR全部)
-        print(result[0][4])
         if(result != "failure"):
             return render_template("control_change.html", result=result) # アカウントの一覧を表示(変更するアカウント)
         else:
@@ -252,9 +252,9 @@ def my_document():
 def subordinate_document():
     if "user" in session:
         doc_name = request.args.get("doc_name") # 検索する内容を取ってくる
-        result = db.select_subordinate_document(session["mail"], doc_name)
+        result = db.select_subordinate_document(session["user"], doc_name)
         if(result != "failure"):
-            return render_template("subordinate_ringi_search.html", result=result)
+            return render_template("subordinate_ringi_search.html", result=result, my_id=session["user"])
         else:
             return redirect(url_for("show_document", error="SQLエラー"))  # エラー付きでメニューを表示する
     else:
@@ -264,6 +264,7 @@ def subordinate_document():
 def show_approval():
     if "user" in session:
         doc_name = request.args.get("doc_name") # 検索する内容を取ってくる
+        print(doc_name)
         result = db.select_show_approval(session["user"], doc_name)
         if(result != "failure"):
             return render_template("approval_ringi_search.html", result=result)
@@ -275,47 +276,75 @@ def show_approval():
 @app.route("/comment_edit")  # 部下の申請一覧と自分に対してきた申請一覧のコメントをクリックした時の処理
 def comment_edit():
     if "user" in session:
-        result = request.args.get("result")  # 一覧表示するときに使用した値を持ってくる
-        return render_template("", result=result)   # コメント編集するための稟議書を表示する
+        num = request.args.get("number")          # 一覧表示するときに使用した値を持ってくる
+        document_id = request.args.get("doc_id")
+        doc_name = request.args.get("doc_name")
+        contents = request.args.get("contents")
+        quaritity = request.args.get("quaritity")
+        price = request.args.get("price")
+        total_payment = request.args.get("total_payment")
+        reason = request.args.get("reason")
+        comment = request.args.get("comment")
+        result = request.args.get("result")
+        preferred_day = request.args.get("preferred_day")    
+        return render_template("ringi5.html", num=num, name=session["name"], document_id=document_id, doc_name=doc_name, contents=contents, quaritity=quaritity, price=price, total_payment=total_payment, reason=reason, comment=comment, result=result, preferred_day=preferred_day)   # コメント編集するための稟議書を表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
 @app.route("/comment_save")  # コメントを編集して保存を押したとき
 def comment_save():
     if "user" in session:
-        result = request.args.get("result")
+        num = request.args.get("number")          # 一覧表示するときに使用した値を持ってくる
+        document_id = request.args.get("document_id")
+        doc_name = request.args.get("doc_name")
+        contents = request.args.get("contents")
+        quaritity = request.args.get("quaritity")
+        price = request.args.get("price")
+        total_payment = request.args.get("total_payment")
+        reason = request.args.get("reason")
         comment = request.args.get("comment")
-        return render_template("", result=result, comment=comment)  # コメント編集確認画面を表示する
+        result = request.args.get("result")
+        preferred_day = request.args.get("preferred_day")    
+        return render_template("ringi6.html", num=num, name=session["name"], document_id=document_id, doc_name=doc_name, contents=contents, quaritity=quaritity, price=price, total_payment=total_payment, reason=reason, comment=comment, result=result, preferred_day=preferred_day)   # コメント編集を確認するための稟議書を表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
 @app.route("/comment_confirm") # コメント編集確認画面の保存を押したとき
 def comment_confirm():
     if "user" in session:
-        result = request.args.get("result")
-        document_id = request.args.get("document_id")
+        document_id = request.args.get("doc_id")
         comment = request.args.get("comment")
         result = db.comment_edit(document_id, comment)  # 編集したコメントをアップデートする
         if(result != "failure"):
-            return render_template("")  #  コメント編集完了画面を表示する
+            return render_template("comment_edit_result.html")  #  コメント編集完了画面を表示する
         else:
-            return render_template("", error="SQLエラー")  # エラー付きで稟議書メニューを表示する
+            return redirect(url_for("show_document", error="SQLエラー"))  # エラー付きで稟議書メニューを表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
-@app.route("/look_document")    # 部下の申請一覧から確認を押したとき
-def look_document():
-    if "user" in session:
-        result = request.args.get("result")
-        return render_template("", result=result)  # 選択した稟議書を表示する
-    else:
-        return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
+# @app.route("/look_document")    # 部下の申請一覧から確認を押したとき
+# def look_document():
+#     if "user" in session:
+#         result = request.args.get("result")
+#         return render_template("", result=result)  # 選択した稟議書を表示する
+#     else:
+#         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
 @app.route("/superior_approval")  # 自分に対しての申請一覧の編集を押したとき
 def superior_approval():
     if "user" in session:
+        num = request.args.get("num")
+        document_id = request.args.get("document_id")
+        doc_name = request.args.get("doc_name")
+        contents = request.args.get("contents")
+        quaritity = request.args.get("quaritity")
+        price = request.args.get("price")
+        total_payment = request.args.get("total_payment")
+        reason = request.args.get("reason")
+        comment = request.args.get("comment")
         result = request.args.get("result")
-        return render_template("", result=result)   # 承認か否決する画面を表示する
+        preferred_day = request.args.get("preferred_day")    
+        return render_template("ringi4.html", num=num, name=session["name"], document_id=document_id, doc_name=doc_name, contents=contents, quaritity=quaritity, price=price, total_payment=total_payment, reason=reason, comment=comment, result=result, preferred_day=preferred_day)   # 承認するための画面を表示
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -323,13 +352,13 @@ def superior_approval():
 def superior_approval_complete():
     if "user" in session:
         doc_id = request.args.get("document_id")
-        if session["superior_mail"] != "null":
+        if session["superior_mail"] != "null" and session["superior_mail"] != "":
             superior_id = db.select_superior_id(session["superior_mail"])
             result = db.approval(doc_id, superior_id[0], session["user"])    
         else:
             result = db.president_approval(doc_id, session["user"])  # 社長の承認
         if result != "failure":
-            return render_template("")   # 承認完了画面を表示する
+            return render_template("approval_result.html")   # 承認完了画面を表示する
         else:
             return redirect(url_for('show_document', error="SQLエラー")) # エラーでメニュー表示
     else:
@@ -341,7 +370,7 @@ def superior_rejection_complete():
         document_id = request.args.get("document_id")
         result = db.rejection(document_id, session["user"])
         if result != "failure":
-            return render_template("")   # 否決完了画面を表示する
+            return render_template("reject_result.html")   # 否決完了画面を表示する
         else:
             return redirect(url_for("show_document", error="SQLエラー"))
     else:
@@ -352,7 +381,7 @@ def superior_rejection_complete():
 @app.route("/create_document") # 「作成」を押したときに新しい稟議書を表示する
 def create_document():
     if "user" in session:
-        return render_template("")   # 稟議書を表示
+        return render_template("ringi1.html", textmanager=session["name"])   # 稟議書を表示
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -376,6 +405,42 @@ def insert_document():
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
+@app.route("/save_document")
+def save_document():
+    if "user" in session:
+        doc_id = request.args.get("doc_id")
+        doc_name = request.args.get("doc_name")
+        contents = request.args.get("contents")
+        quaritity = request.args.get("quaritity")
+        price = request.args.get("price")
+        total_payment = request.args.get("total_payment")
+        reason = request.args.get("reason")
+        preferred_day = request.args.get("preferred_day")
+        return render_template("ringi_save.html", name=session["name"], document_id=doc_id, doc_name=doc_name, contents=contents, quaritity=quaritity, price=price, total_payment=total_payment, reason=reason, preferred_day=preferred_day)    
+    else:
+        return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
+
+
+@app.route("/save_document_complete")
+def save_document_complete():
+    if "user" in session:
+        doc_id = request.args.get("doc_id")
+        doc_name = request.args.get("doc_name")
+        contents = request.args.get("contents")
+        quaritity = request.args.get("quaritity")
+        price = request.args.get("price")
+        total_payment = request.args.get("total_payment")
+        reason = request.args.get("reason")
+        preferred_day = request.args.get("preferred_day")
+        result1 = db.update_document(doc_id, doc_name, contents, quaritity, price, total_payment, reason, preferred_day) # 稟議書をインサートするdb処理　failureかsuccessが返ってくる
+        if(result1 != "failure"):
+            return redirect(url_for("application",document_id=doc_id, doc_name=doc_name, contents=contents, quaritity=quaritity, price=price, total_payment=total_payment, reason=reason, preferred_day=preferred_day)) # 稟議書を申請する画面に飛ばすURLにとばす
+        else:
+            return redirect(url_for("show_document", error="保存に失敗しました。"))  # メニューにエラー付きで飛ばす
+    else:
+        return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
+
+
 @app.route("/application")
 def application():
     if "user" in session:
@@ -389,7 +454,7 @@ def application():
         comment = request.args.get("comment")
         result = request.args.get("result")
         preferred_day = request.args.get("preferred_day")    
-        return render_template("",document_id=document_id, doc_name=doc_name, contents=contents, quaritity=quaritity, price=price, total_payment=total_payment, reason=reason, comment=comment, result=result, preferred_day=preferred_day)   # 稟議書を申請する画面に飛ばす
+        return render_template("ringi3.html",name=session["name"], document_id=document_id, doc_name=doc_name, contents=contents, quaritity=quaritity, price=price, total_payment=total_payment, reason=reason, comment=comment, result=result, preferred_day=preferred_day)   # 稟議書を申請する画面に飛ばす
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -404,13 +469,30 @@ def application_complete():
         else:
             return redirect(url_for("show_document", error="SQLエラー")) 
         if(result != "failure"):
-            mail_input.send_mail(session["superier_mail"])   # 申請したと報告するメールを上司に送る
-            return render_template("")   # 申請完了ページを表示する
+            mail_input.send_mail(session["superior_mail"])   # 申請したと報告するメールを上司に送る
+            return render_template("application_result.html")   # 申請完了ページを表示する
         else:
             return redirect(url_for("show_document", error="申請に失敗しました")) # エラー付きでメニューを表示する
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
+@app.route("/show_approval_document")
+def show_approval_document():
+    if "user" in session:
+        num = request.args.get("number") 
+        document_id = request.args.get("document_id")
+        doc_name = request.args.get("doc_name")
+        contents = request.args.get("contents")
+        quaritity = request.args.get("quaritity")
+        price = request.args.get("price")
+        total_payment = request.args.get("total_payment")
+        reason = request.args.get("reason")
+        comment = request.args.get("comment")
+        result = request.args.get("result")
+        preferred_day = request.args.get("preferred_day")    
+        return render_template("ringi2.html", num=num, name=session["name"], document_id=document_id, doc_name=doc_name, contents=contents, quaritity=quaritity, price=price, total_payment=total_payment, reason=reason, comment=comment, result=result, preferred_day=preferred_day)   # 稟議書確認画面表示
+    else:
+        return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
 @app.route("/logout")
 def logout():
@@ -419,6 +501,7 @@ def logout():
     session.pop("auth")
     session.pop("position")
     session.pop("superior_mail")
+    session.pop("name")
     return redirect(url_for("login_page"))
 
 

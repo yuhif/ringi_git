@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/paper2.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="layout"><form action="{{url_for('save_document_complete')}}" method="get">
+        <p class="title">稟議書申請</p>
+        <p class="approval">稟議書名:</p>
+        <input type="text" class="textapproval" name="doc_name" value="{{doc_name}}">
+        <p class="manager">担当者名:</p>
+        <input type="text" class="textmanager" name="textmanager" value="{{name}}" readonly>
+        <p class="applicationdate">要望日時:</p>
+        <input type="date" class="textapplicationdate" name="preferred_day" value="{{preferred_day}}">
+        <p class="department">内容:</p>
+        <input type="text" class="textdepartment" name="contents" value="{{contents}}">
+        <p class="number">数量:</p>
+        <input type="number" class="textnumber" name="quaritity" value="{{quaritity}}" min="1" step="1" max="999999">
+        <p class="payment">支払単価:</p>
+        <input type="number" class="textpayment" name="price" value="{{price}}" max="99999999">
+        <p class="content">必要理由:</p>
+        <textarea name="reason" class="textcontent" cols="30" rows="10">{{reason}}</textarea>
+        <p class="trader">合計費用:</p>
+        <input type="number" name="total_payment" class="texttrader" value="{{total_payment}}" max="9999999999">
+
+        <p class="request">この内容で保存します</p>
+        <input type="hidden" name="doc_id" value="{{document_id}}">
+        <input type="submit" class="request_button" value="保存"></form>
+        <a href="{{url_for('my_document')}}"><button class="back">戻る</button></a>
+    </div>
+</body>
+</html>
