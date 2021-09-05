@@ -21,7 +21,17 @@
             {% for list in result %}
             <tr>
                 <td>{{list[2]}}</td>
-                <td>{{list[4]}}</td>
+                {% if list[5] == 1 %}
+                <td>社長</td>
+                {% elif list[5] == 2 %}
+                <td>常務取締役</td>
+                {% elif list[5] == 3 %}
+                <td>部長</td>
+                {% elif list[5] == 4 %}
+                <td>主任</td>
+                {% else %}
+                <td>一般社員</td>
+                {% endif %}
                 <td>{{list[1]}}</td>
                 <td>{{list[6]}}</td>
                 <td><form action="{{url_for('update_account')}}" method="post">

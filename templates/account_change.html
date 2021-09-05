@@ -15,27 +15,27 @@
     <form action="{{url_for('update_account_complete')}}" method="post">
 
         メールアドレス：<input type="email" name="mail" placeholder="例：～.co.jp ～.com" value="{{mail}}"><br>
-        　　　　　名前：<input type="text" name="name" placeholder="例：岩手太郎" maxlength="6" value="{{name]}}"><br>
-        役職：<select name="job">
-            {% if result[5] == 5 %}
+        　　　　　名前：<input type="text" name="name" placeholder="例：岩手太郎" maxlength="6" value="{{name}}"><br>
+        役職：<select name="position">
+            {% if position == "5" %}
             <option value="5" selected>一般社員</option>
             <option value="4">主任（上司）</option>
             <option value="3">部長</option>
             <option value="2">常務取締役</option>
             <option value="1">社長</option>
-            {% elif result[5] == 4 %}
+            {% elif position == "4" %}
             <option value="5">一般社員</option>
             <option value="4" selected>主任（上司）</option>
             <option value="3">部長</option>
             <option value="2">常務取締役</option>
             <option value="1">社長</option>
-            {% elif result[5] == 3 %}
+            {% elif position == "3" %}
             <option value="5">一般社員</option>
             <option value="4">主任（上司）</option>
             <option value="3" selected>部長</option>
             <option value="2">常務取締役</option>
             <option value="1"></option>社長</option>
-            {% elif result[5] == 2 %}
+            {% elif position == "2" %}
             <option value="5">一般社員</option>
             <option value="4">主任（上司）</option>
             <option value="3">部長</option>
@@ -51,19 +51,19 @@
 
         </select><br>
 
-        直属の上司のメールアドレス：<input type="email" name="superior_mail" 　placeholder="例：～.jp　～.com" value="{{superior_mail}}"><br>
+        直属の上司のメールアドレス：<input type="text" name="superior_mail" 　placeholder="例：～.jp　～.com" value="{{superior_mail}}"><br>
         所属部署：<select name="department">
-            {% if department == 1 %}
-            <option value="営業部" selected></option>
-            <option value="開発部"></option>
+            {% if department == "1" %}
+            <option value="1" selected>営業部</option>
+            <option value="2">開発部</option>
             {% else %}
-            <option value="営業部"></option>
-            <option value="開発部" selected></option>
+            <option value="1">営業部</option>
+            <option value="2" selected>開発部</option>
             {% endif %}
                 </select>
 
                 <input type="hidden" name="id" value="{{id}}">
-                <button>変更</button>
+                <input type="submit" value="変更">
     </form>
     <a href="{{url_for('show_account')}}"><button>戻る</button></a>
 
