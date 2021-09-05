@@ -4,8 +4,8 @@ from email.mime.multipart import MIMEMultipart
 
 def send_mail(to):
     # 送信に必要な情報を定数で定義
-    ID = "numatakazuya.1234@gmail.com"
-    PASS = "yutakuma1334"
+    ID = "stesuto6@gmail.com"
+    PASS = "morijyobi567"
     HOST = "smtp.gmail.com"
     PORT = 587
     subject = "稟議書承認依頼"
@@ -16,7 +16,7 @@ def send_mail(to):
 
     # 件名、送信元アドレス、送信先アドレスを設定
     msg["Subject"] = subject
-    msg["From"] = print(PASS.get)
+    msg["From"] = ID
     msg["To"] = to
 
     # SMTPサーバへ接続し、TLS通信開始

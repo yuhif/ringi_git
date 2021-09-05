@@ -29,27 +29,51 @@
         </tr>
         {% for list in result %}
         <tr>
+            {% if list[10] != 3 %}
             <td>{{list[0]}}</td>
             <td>{{list[2]}}</td>
             <td>{{list[13]}}</td>
             <td>{{list[3]}}</td>
+            {% if list[11] == my_id %}
+            <td>
+                <form action="{{url_for('comment_edit')}}" method="get">
+                    <input type="hidden" name="doc_id" value="{{list[0]}}">
+                    <input type="hidden" name="doc_name" value="{{list[2]}}">
+                    <input type="hidden" name="contents" value="{{list[4]}}">
+                    <input type="hidden" name="quaritity" value="{{list[5]}}">
+                    <input type="hidden" name="price" value="{{list[6]}}">
+                    <input type="hidden" name="total_payment" value="{{list[7]}}">
+                    <input type="hidden" name="reason" value="{{list[8]}}">
+                    <input type="hidden" name="preferred_day" value="{{list[12]}}">
+                    <input type="hidden" name="comment" value="{{list[9]}}">
+                    <input type="hidden" name="number" value="2">
+                <input type="submit" value="編集" style="width: 100%;"></form>
+            </td>
+            {% else %}
             <td>{{list[9]}}</td>
+            {% endif %}
             <td>{{list[12]}}</td>
             {% if list[10] == 1 %}
-            <td>承認</td>
-            <td></td>
+            <td>承認済</td>
             {% elif list[10] == 2 %}
             <td>否決</td>
-            <td></td>
             {% elif list[10] == 0 %}
             <td>承認待ち</td>
-            <td></td>
-            {% else %}
-            <td>未申請</td>
-            <td><input type=submit value="編集"></td>
             {% endif %}
+            <form action="{{url_for('show_approval_document')}}" method="get">
+            <input type="hidden" name="doc_id" value="{{list[0]}}">
+            <input type="hidden" name="doc_name" value="{{list[2]}}">
+            <input type="hidden" name="contents" value="{{list[4]}}">
+            <input type="hidden" name="quaritity" value="{{list[5]}}">
+            <input type="hidden" name="price" value="{{list[6]}}">
+            <input type="hidden" name="total_payment" value="{{list[7]}}">
+            <input type="hidden" name="reason" value="{{list[8]}}">
+            <input type="hidden" name="preferred_day" value="{{list[12]}}">
+            <input type="hidden" name="number" value="2">
+            <input type="hidden" name="comment" value="{{list[9]}}">
+            <td><input type=submit value="確認"></td></form>
 
-            
+            {% endif %}
         </tr>
         {% endfor %}
         <!-- <tr>
