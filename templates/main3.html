@@ -26,5 +26,8 @@
         </form>
         {% endif %}
     </div>
+    {% if error != None %}
+    <p style="color: red; text-align: center;">{{error}}</p>
+    {% endif %}
 </body>
 </html>

@@ -21,5 +21,8 @@
         <a href="{{url_for('show_approval')}}"><button class="ubordinate_button">承認待ち</button></a>
         {% endif %}
     </div>
+    {% if error != None %}
+    <p style="color: red; text-align: center;">{{error}}</p>
+    {% endif %}
 </body>
 </html>

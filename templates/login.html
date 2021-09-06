@@ -11,6 +11,9 @@
 <body>
     <form action="{{url_for('login')}}" method="post">
     <div class="box"></div>
+    {% if error != None %}
+    <p style="color: red; text-align: center; position:absolute; top:70%; left: 30%;">{{error}}</p>
+    {% endif %}
     <p class="title2">稟議書申請システム</p>
     <p class="mail">メールアドレス</p>
     <input type="text" class="textmail" name="textmail">
@@ -18,5 +21,6 @@
     <input type="password" class="textpw" name="textpw">
     <input class="login" type="submit" value="ログイン">
     </form>
+
 </body>
 </html>
