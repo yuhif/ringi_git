@@ -95,7 +95,8 @@ def entry_complete():
 @app.route("/show_document")
 def show_document():
     if "user" in session:
-        return render_template("main2.html", position=session["position"])    # 稟議書一覧を開くためのメニューを表示、役職で表示異なる  
+        error = request.args.get("error")
+        return render_template("main2.html", position=session["position"], error=error)    # 稟議書一覧を開くためのメニューを表示、役職で表示異なる  
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
@@ -194,15 +195,17 @@ def update_account_complete():
 
 @app.route("/my_account")
 def my_account():
-    if "user" in session:  
-        return render_template("main4.html", name=session["name"], mail=session["mail"], superior_mail=session["superior_mail"], position=session["position"])    # 「アカウント情報」を押したときに表示される自分のアカウント情報のページ
+    if "user" in session:
+        error = request.args.get("error")
+        return render_template("main4.html", name=session["name"], mail=session["mail"], superior_mail=session["superior_mail"], position=session["position"], error=error)    # 「アカウント情報」を押したときに表示される自分のアカウント情報のページ
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
 @app.route("/update_pw")
 def update_pw():
     if "user" in session:
-        return render_template("main5.html", error="")   # 「パスワードの変更」を押したときに表示するパスワード変更ページ
+        error = request.args.get("error")
+        return render_template("main5.html", error=error)   # 「パスワードの変更」を押したときに表示するパスワード変更ページ
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 

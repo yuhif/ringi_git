@@ -21,5 +21,8 @@
             <input type="password" class="pw3" name="pw3">
         <button class="next">次へ</button></form>
     </div>
+    {% if error != None %}
+    <p style="color: red; text-align: center;">{{error}}</p>
+    {% endif %}
 </body>
 </html>

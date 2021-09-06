@@ -35,5 +35,8 @@
         {% endif %}
         上司のメールアドレス：{{superior_mail}}<br>
     </div>
+    {% if error != None %}
+    <p style="color: red; text-align: center;">{{error}}</p>
+    {% endif %}
 </body>
 </html>
