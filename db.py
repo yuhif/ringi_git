@@ -43,7 +43,9 @@ def login(mail, pw):
     except Exception as e:
         print("SQLの実行に失敗", e)
         return "failure"
-
+ 
+    if result == None:
+        return "failure"
     b_pw = bytes(pw, "utf-8")
     b_salt = bytes(result[3], "utf-8")
     hashed_pw = hashlib.pbkdf2_hmac("sha256", b_pw, b_salt, 100).hex()
