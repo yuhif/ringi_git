@@ -14,8 +14,8 @@
 <body>
     <form action="{{url_for('update_account_complete')}}" method="post">
 
-        メールアドレス：<input type="email" name="mail" placeholder="例：～.co.jp ～.com" value="{{mail}}"><br>
-        　　　　　名前：<input type="text" name="name" placeholder="例：岩手太郎" maxlength="6" value="{{name}}"><br>
+        メールアドレス：<input type="email" name="mail" placeholder="例：～.co.jp ～.com" value="{{mail}}" required><br>
+        　　　　　名前：<input type="text" name="name" placeholder="例：岩手太郎" maxlength="6" value="{{name}}" required><br>
         役職：<select name="position">
             {% if position == "5" %}
             <option value="5" selected>一般社員</option>

@@ -10,8 +10,8 @@
 <body>
     <fieldset>
     <form action="{{url_for('entry_confirm')}}" method="post" style="display: inline;">
-    メールアドレス：<input type="text" name="mail" placeholder=""><br>
-    名前：<input type="text" name="name" placeholder="例：岩手太郎"><br>
+    メールアドレス：<input type="text" name="mail" placeholder="" required><br>
+    名前：<input type="text" name="name" placeholder="例：岩手太郎" required><br>
     役職：<select name="position">
         <option value="5">一般社員</option>
         <option value="4">主任（上司）</option>
