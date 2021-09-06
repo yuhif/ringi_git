@@ -22,7 +22,17 @@
     <div class="info">
         名前：{{name}}<br>
         メールアドレス：{{mail}}<br>
-        役職：{{position}}<br>
+        {% if position == 1 %}
+        役職：社長<br>
+        {% elif position == 2 %}
+        役職：常務取締役<br>
+        {% elif position == 3 %}
+        役職：部長<br>
+        {% elif position == 4 %}
+        役職：主任<br>
+        {% else %}
+        役職：一般社員<br>
+        {% endif %}
         上司のメールアドレス：{{superior_mail}}<br>
     </div>
 </body>
