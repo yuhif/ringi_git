@@ -17,5 +17,13 @@
         <a href="{{url_for('logout')}}"><button class="button4">ログアウト</button></a>
         <a href="{{url_for('update_pw')}}"><button class="change">パスワードの変更</button></a>
     </div>
+
+    <h2 style="position:absolute; top:30%; left: 20%; font-size: 30px;">アカウント情報</h2>
+    <div class="info">
+        名前：{{name}}<br>
+        メールアドレス：{{mail}}<br>
+        役職：{{position}}<br>
+        上司のメールアドレス：{{superior_mail}}<br>
+    </div>
 </body>
 </html>

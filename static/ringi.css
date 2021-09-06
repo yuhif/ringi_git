@@ -277,3 +277,13 @@
     font-size: 50px; 
 }
 
+.info {
+    font-size: 22px;
+    position: absolute;
+    top: 42%;
+    left: 20%;
+    border: black solid 2px;
+    padding: 18px;
+    padding-left: 35px;
+    padding-right: 35px;
+}

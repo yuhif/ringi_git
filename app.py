@@ -195,7 +195,7 @@ def update_account_complete():
 @app.route("/my_account")
 def my_account():
     if "user" in session:  
-        return render_template("main4.html")    # 「アカウント情報」を押したときに表示される自分のアカウント情報のページ
+        return render_template("main4.html", name=session["name"], mail=session["mail"], superior_mail=session["superior_mail"], position=session["position"])    # 「アカウント情報」を押したときに表示される自分のアカウント情報のページ
     else:
         return redirect(url_for("login_page", error="セッションが切れました"))  # セッション切れでログイン画面表示
 
