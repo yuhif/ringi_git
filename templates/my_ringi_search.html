@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet">
+    <title>稟議書管理システム</title>
+</head>
+
+<body>
+    稟議書申請一覧      <a href="{{url_for('show_document')}}"><input type="submit" value="戻る"></a><br>
+    <form action="{{url_for('my_document')}}">
+    検索：<select name="status">
+    <option value="null">全部</option>
+    <option value="0">承認待ち</option>
+    <option value="1">承認済み</option>
+    <option value="2">否決</option>
+    <option value="3">未申請</option>
+    </select>
+    <input type=submit value="検索"></form>
+
+    <table border="1" class="t2">
+        <tr class="one">
+            <!-- <th>稟議書申請一覧</th> -->
+            <th>No.</th>
+            <th>稟議書名</th>
+            <th>申請者名</th>
+            <th>日付</th>
+            <th>コメント</th>
+            <th>承認締め切り</th>
+            <th>申請書状態</th>
+            <th>編集</th>
+        </tr>
+        {% for list in result %}
+        <tr>
+            <td>{{list[0]}}</td>
+            <td>{{list[2]}}</td>
+            <td>{{list[13]}}</td>
+            <td>{{list[3]}}</td>
+            <td>{{list[9]}}</td>
+            <td>{{list[12]}}</td>
+            {% if list[10] == 1 %}
+            <td>承認</td>
+            <td><form action="{{url_for('show_approval_document')}}" method="get">
+            {% elif list[10] == 2 %}
+            <td>否決</td>
+            <td><form action="{{url_for('show_approval_document')}}" method="get">
+            {% elif list[10] == 0 %}
+            <td>承認待ち</td>
+            <td><form action="{{url_for('show_approval_document')}}" method="get">
+            {% else %}
+            <td>未申請</td><form action="{{url_for('save_document')}}" method="get">
+
+            {% endif %}
+            <input type="hidden" name="doc_id" value="{{list[0]}}">
+            <input type="hidden" name="doc_name" value="{{list[2]}}">
+            <input type="hidden" name="contents" value="{{list[4]}}">
+            <input type="hidden" name="quaritity" value="{{list[5]}}">
+            <input type="hidden" name="price" value="{{list[6]}}">
+            <input type="hidden" name="total_payment" value="{{list[7]}}">
+            <input type="hidden" name="reason" value="{{list[8]}}">
+            <input type="hidden" name="preferred_day" value="{{list[12]}}">
+            <input type="hidden" name="number" value="1">
+            <input type="hidden" name="comment" value="{{list[9]}}">
+            {% if list[10] == 3 %}
+            <td><input type=submit value="編集"></form></td>
+            {% else %}
+            <input type=submit value="確認"></form></td>
+            {% endif %}
+            
+            
+        </tr>
+        {% endfor %}
+        <!-- <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp; </td>
+        </tr> -->
+
+    </table>
+</body>
+
+</html>

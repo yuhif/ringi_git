@@ -10,19 +10,33 @@
 <body>
     <div class="layout">
         <p class="title">稟議書申請</p>
-        <p class="approval">稟議書名:</p>
-        <p class="manager">担当者名:</p>
-        <p class="applicationdate">投稿日:</p>
-        <p class="department">部署名:</p>
-        <p class="number">数量:</p>
-        <p class="payment">支払単価:</p>
-        <p class="content">必要理由:</p>
-        <p class="trader">業者選定理由:</p>
+        <p class="approval">稟議書名:{{doc_name}}</p>
+        <p class="manager">担当者名:{{name}}</p>
+        <p class="applicationdate">要望日時:{{preferred_day}}</p>
+        <p class="department">内容：{{contents}}</p>
+        <p class="number">数量:{{quaritity}}</p>
+        <p class="payment">支払単価:{{price}}</p>
+        <p class="content">必要理由:{{reason}}</p>
+        <p class="trader">合計費用:{{total_payment}}</p>
         <p class="comment2">コメント:</p>
-        <textarea name="textcomment" class="textcomment" cols="30" rows="10"></textarea>
-        <button class="back3">戻る</button>
+        
+        <form action="{{url_for('comment_edit')}}" method="get">
+            <input type="hidden" name="document_id" value="{{document_id}}">
+            <input type="hidden" name="doc_name" value="{{doc_name}}">
+            <input type="hidden" name="contents" value="{{contents}}">
+            <input type="hidden" name="quaritity" value="{{quaritity}}">
+            <input type="hidden" name="price" value="{{price}}">
+            <input type="hidden" name="total_payment" value="{{total_payment}}">
+            <input type="hidden" name="reason" value="{{reason}}">
+            <input type="hidden" name="preferred_day" value="{{preferred_day}}">
+            <input type="hidden" name="number" value="{{num}}">
+            <input type="hidden" name="comment" value="{{comment}}">
+        <input type="submit" value="戻る" class="back3"></form>
         <p class="keep">コメントを保存しますか</p>
-        <button class="keep_button">保存</button>
+        <form action="{{url_for('comment_confirm')}}" method="get">
+            <input type="hidden" name="doc_id" value="{{document_id}}">
+            <textarea name="comment" class="textcomment" cols="30" rows="10" readonly>{{comment}}</textarea>
+            <input type="submit" value="保存" class="keep_button"></form>
     </div>
 </body>
 </html>

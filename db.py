@@ -5,7 +5,7 @@ import random, string
 from MySQLdb import connections
 
 def get_connection():
-    return MySQLdb.connect(user="root", passwd="aresu0703", host="localhost", db="Approval_management", charset="utf8")
+    return MySQLdb.connect(user="root", passwd="jyobi2001", host="localhost", db="Approval_management", charset="utf8")
 
 def entry(name, mail, department_id, position_id, superior_mail, auth):
     randlist = [random.choice(string.ascii_letters + string.digits) for i in range(20)]

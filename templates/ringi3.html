@@ -8,27 +8,29 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="layout">
+    <div class="layout"><form action="{{url_for('application_complete')}}" method="get">
         <p class="title">稟議書申請</p>
         <p class="approval">稟議書名:</p>
-        <input type="text" class="textapproval" name="textmail">
+        <input type="text" class="textapproval" name="doc_name" value="{{doc_name}}" readonly>
         <p class="manager">担当者名:</p>
-        <input type="text" class="textmanager" name="textmanager">
-        <p class="applicationdate">投稿日:</p>
-        <input type="date" class="textapplicationdate" name="textapplicationdate">
-        <p class="department">部署名:</p>
-        <input type="text" class="textdepartment" name="textdepartment">
+        <input type="text" class="textmanager" name="name" value="{{name}}" readonly>
+        <p class="applicationdate">要望日時:</p>
+        <input type="date" class="textapplicationdate" name="preferred_day" value="{{preferred_day}}" readonly>
+        <p class="department">内容:</p>
+        <input type="text" class="textdepartment" name="contents" value="{{contents}}" readonly>
         <p class="number">数量:</p>
-        <input type="number" class="textnumber" name="number" value="1" min="1" step="1">
+        <input type="number" class="textnumber" name="quaritity" value="{{quaritity}}" min="1" step="1" readonly>
         <p class="payment">支払単価:</p>
-        <input type="text" class="textpayment" name="textpayment">
+        <input type="number" class="textpayment" name="price" value="{{price}}" readonly>
         <p class="content">必要理由:</p>
-        <textarea name="textcontent" class="textcontent" cols="30" rows="10"></textarea>
-        <p class="trader">業者選定理由:</p>
-        <textarea name="texttrader" class="texttrader" cols="30" rows="10"></textarea>
-        <button class="back">戻る</button>
+        <textarea name="reason" class="textcontent" cols="30" rows="10" readonly>{{reason}}</textarea>
+        <p class="trader">合計費用:</p>
+        <input type="number" name="total_payment" class="texttrader" value="{{total_payment}}" readonly>
+
         <p class="request">この内容で申請します</p>
-        <button class="request_button">申請</button>
+        <input type="hidden" name="document_id" value="{{document_id}}">
+        <input type="submit" class="request_button" value="申請"></form>
+        <a href="{{url_for('show_document')}}"><button class="back">戻る</button></a>
     </div>
 </body>
 </html>

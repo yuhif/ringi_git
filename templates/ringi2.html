@@ -10,16 +10,23 @@
 <body>
     <div class="layout">
         <p class="title">稟議書申請</p>
-        <p class="approval">稟議書名:</p>
-        <p class="manager">担当者名:</p>
-        <p class="applicationdate">投稿日:</p>
-        <p class="department2">部署名:</p>
-        <p class="number2">数量:</p>
-        <p class="payment2">支払単価:</p>
-        <p class="content2">必要理由:</p>
-        <p class="trader2">業者選定理由:</p>
-        <p class="comment">コメント:</p>
-        <button class="back2">戻る</button>
+        <p class="approval">稟議書名:{{doc_name}}</p>
+        <p class="manager">担当者名:{{name}}</p>
+        <p class="applicationdate">要望日時:{{preferred_day}}</p>
+        <p class="department2">内容:{{contents}}</p>
+        <p class="number2">数量:{{quaritity}}</p>
+        <p class="payment2">支払単価:{{price}}</p>
+        <p class="content2">必要理由:{{reason}}</p>
+        <p class="trader2">合計費用:{{total_payment}}</p>
+        <p class="comment">コメント:{{comment}}</p>
+        {% if num == "1" %}
+        <a href="{{url_for('my_document')}}">
+        {% elif num == "2" %}
+        <a href="{{url_for('subordinate_document')}}">
+        {% else %}
+        <a href="{{url_for('show_approval')}}">
+        {% endif %}
+        <button class="back2">戻る</button></a>
     </div>
 </body>
 </html>

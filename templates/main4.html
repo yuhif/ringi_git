@@ -11,11 +11,32 @@
 <body>
     <div class="layout">
         <h1 class="title">稟議書申請システム</h1>
-        <button class="button1">作成</button>
-        <button class="button2">一覧</button>
-        <button class="button3">アカウント</button>
-        <button class="button4">ログアウト</button>
-        <button class="change">パスワードの変更</button>
+        <a href="{{url_for('create_document')}}"><button class="button1">作成</button></a>
+        <a href="{{url_for('show_document')}}"><button class="button2">一覧</button></a>
+        <a href="{{url_for('show_account')}}"><button class="button3">アカウント</button></a>
+        <a href="{{url_for('logout')}}"><button class="button4">ログアウト</button></a>
+        <a href="{{url_for('update_pw')}}"><button class="change">パスワードの変更</button></a>
     </div>
+
+    <h2 style="position:absolute; top:30%; left: 20%; font-size: 30px;">アカウント情報</h2>
+    <div class="info">
+        名前：{{name}}<br>
+        メールアドレス：{{mail}}<br>
+        {% if position == 1 %}
+        役職：社長<br>
+        {% elif position == 2 %}
+        役職：常務取締役<br>
+        {% elif position == 3 %}
+        役職：部長<br>
+        {% elif position == 4 %}
+        役職：主任<br>
+        {% else %}
+        役職：一般社員<br>
+        {% endif %}
+        上司のメールアドレス：{{superior_mail}}<br>
+    </div>
+    {% if error != None %}
+    <p style="color: red; text-align: center;">{{error}}</p>
+    {% endif %}
 </body>
 </html>

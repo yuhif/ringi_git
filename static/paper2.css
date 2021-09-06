@@ -115,9 +115,9 @@
 
 .trader{
     position: absolute;
-    top: 75%; 
+    top: 74%; 
     left: 25%;
-    font-size: 15px;
+    font-size: 20px;
 }
 
 .texttrader{
@@ -125,7 +125,7 @@
     top: 75%; 
     left: 35%;
     width: 550px;
-    height: 100px;
+    height: 40px;
     line-height: 1.5;
 }
 

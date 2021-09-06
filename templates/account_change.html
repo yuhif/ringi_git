@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="../static/account_change.css" rel="stylesheet">
+
+    <title></title>
+</head>
+
+<body>
+    <form action="{{url_for('update_account_complete')}}" method="post">
+
+        メールアドレス：<input type="email" name="mail" placeholder="例：～.co.jp ～.com" value="{{mail}}"><br>
+        　　　　　名前：<input type="text" name="name" placeholder="例：岩手太郎" maxlength="6" value="{{name}}"><br>
+        役職：<select name="position">
+            {% if position == "5" %}
+            <option value="5" selected>一般社員</option>
+            <option value="4">主任（上司）</option>
+            <option value="3">部長</option>
+            <option value="2">常務取締役</option>
+            <option value="1">社長</option>
+            {% elif position == "4" %}
+            <option value="5">一般社員</option>
+            <option value="4" selected>主任（上司）</option>
+            <option value="3">部長</option>
+            <option value="2">常務取締役</option>
+            <option value="1">社長</option>
+            {% elif position == "3" %}
+            <option value="5">一般社員</option>
+            <option value="4">主任（上司）</option>
+            <option value="3" selected>部長</option>
+            <option value="2">常務取締役</option>
+            <option value="1"></option>社長</option>
+            {% elif position == "2" %}
+            <option value="5">一般社員</option>
+            <option value="4">主任（上司）</option>
+            <option value="3">部長</option>
+            <option value="2" selected>常務取締役</option>
+            <option value="1">社長</option>
+            {% else %}
+            <option value="5">一般社員</option>
+            <option value="4">主任（上司）</option>
+            <option value="3">部長</option>
+            <option value="2">常務取締役</option>
+            <option value="1" selected>社長</option>
+            {% endif %}
+
+        </select><br>
+
+        直属の上司のメールアドレス：<input type="text" name="superior_mail" 　placeholder="例：～.jp　～.com" value="{{superior_mail}}"><br>
+        所属部署：<select name="department">
+            {% if department == "1" %}
+            <option value="1" selected>営業部</option>
+            <option value="2">開発部</option>
+            {% else %}
+            <option value="1">営業部</option>
+            <option value="2" selected>開発部</option>
+            {% endif %}
+                </select>
+
+                <input type="hidden" name="id" value="{{id}}">
+                <input type="submit" value="変更">
+    </form>
+    <a href="{{url_for('show_account')}}"><button>戻る</button></a>
+
+
+</body>
+
+</html>

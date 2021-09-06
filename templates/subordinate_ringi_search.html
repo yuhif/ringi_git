@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet">
+    <title>稟議書管理システム</title>
+</head>
+
+<body>
+    稟議書申請一覧      <a href="{{url_for('show_document')}}"><input type="submit" value="戻る"></a><br>
+    <form action="{{url_for('subordinate_document')}}">
+    検索：<input type="text" name="doc_name">
+    <input type=submit value="検索"></form>
+
+    <table border="1" class="t2">
+        <tr class="one">
+            <!-- <th>稟議書申請一覧</th> -->
+            <th>No.</th>
+            <th>稟議書名</th>
+            <th>申請者名</th>
+            <th>日付</th>
+            <th>コメント</th>
+            <th>承認締め切り</th>
+            <th>申請書状態</th>
+            <th>確認</th>
+        </tr>
+        {% for list in result %}
+        <tr>
+            {% if list[10] != 3 %}
+            <td>{{list[0]}}</td>
+            <td>{{list[2]}}</td>
+            <td>{{list[13]}}</td>
+            <td>{{list[3]}}</td>
+            {% if list[11] == my_id %}
+            <td>
+                <form action="{{url_for('comment_edit')}}" method="get">
+                    <input type="hidden" name="doc_id" value="{{list[0]}}">
+                    <input type="hidden" name="doc_name" value="{{list[2]}}">
+                    <input type="hidden" name="contents" value="{{list[4]}}">
+                    <input type="hidden" name="quaritity" value="{{list[5]}}">
+                    <input type="hidden" name="price" value="{{list[6]}}">
+                    <input type="hidden" name="total_payment" value="{{list[7]}}">
+                    <input type="hidden" name="reason" value="{{list[8]}}">
+                    <input type="hidden" name="preferred_day" value="{{list[12]}}">
+                    <input type="hidden" name="comment" value="{{list[9]}}">
+                    <input type="hidden" name="number" value="2">
+                <input type="submit" value="編集" style="width: 100%;"></form>
+            </td>
+            {% else %}
+            <td>{{list[9]}}</td>
+            {% endif %}
+            <td>{{list[12]}}</td>
+            {% if list[10] == 1 %}
+            <td>承認済</td>
+            {% elif list[10] == 2 %}
+            <td>否決</td>
+            {% elif list[10] == 0 %}
+            <td>承認待ち</td>
+            {% endif %}
+            <form action="{{url_for('show_approval_document')}}" method="get">
+            <input type="hidden" name="doc_id" value="{{list[0]}}">
+            <input type="hidden" name="doc_name" value="{{list[2]}}">
+            <input type="hidden" name="contents" value="{{list[4]}}">
+            <input type="hidden" name="quaritity" value="{{list[5]}}">
+            <input type="hidden" name="price" value="{{list[6]}}">
+            <input type="hidden" name="total_payment" value="{{list[7]}}">
+            <input type="hidden" name="reason" value="{{list[8]}}">
+            <input type="hidden" name="preferred_day" value="{{list[12]}}">
+            <input type="hidden" name="number" value="2">
+            <input type="hidden" name="comment" value="{{list[9]}}">
+            <td><input type=submit value="確認"></td></form>
+
+            {% endif %}
+        </tr>
+        {% endfor %}
+        <!-- <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp; </td>
+        </tr> -->
+
+    </table>
+</body>
+
+</html>

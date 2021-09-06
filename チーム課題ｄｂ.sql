@@ -13,6 +13,7 @@ create table department(
 
 ・部署テーブルinsert文
 insert into department values (1,'営業部');
+insert into department values (2,'開発部');
 
 役職テーブル
 create table official_position(
@@ -21,7 +22,11 @@ create table official_position(
 );
 
 ・役職テーブルinsert文
-insert into official_position values(1,'部長');
+insert into official_position values(1,'社長');
+insert into official_position values(2,'常務取締役');
+insert into official_position values(3,'部長');
+insert into official_position values(4,'主任');
+insert into official_position values(5,'一般社員');
 
 
 利用者テーブル
@@ -73,14 +78,14 @@ create table approval_document(
 	foreign key (user_id)
 	references user(user_id),
 	document_name varchar(32) not null,
-	application_date date not null,
+	application_date date ,
 	contents varchar(256) not null,
 	quaritity integer(6) not null,
 	price integer(8) not null,
 	total_payment integer(10) not null,
 	reason varchar(256) not null,
 	comment varchar(256),
-	result integer(2), //申請前＝null,承認待ち=0,承認＝1,否決=2//
+	result integer(2) not null, //申請前＝3,承認待ち=0,承認＝1,否決=2//
 	authorizer_id integer(6) not null,
 	foreign key (authorizer_id)
 	references user(user_id),
@@ -89,7 +94,9 @@ create table approval_document(
 	
 	
 ・稟議書テーブルinsert文
-insert into approval_document values(2,1,"稟議書",sysdate(),"稟議内容です",100,400000,40000000,"理由です","コメントです",0,5,(任意の日付));
+insert into approval_document(user_id,document_name,application_date,contents,quaritity,price,total_payment,
+reason,comment,result,authorizer_id,preferred_day) 
+value(1,"稟議書",sysdate(),"稟議内容です",100,400000,40000000,"理由です","コメントです",0,5,(任意の日付));
 
 
 稟議書管理システム・セレクト文
@@ -111,7 +118,7 @@ insert into approval_document values(2,1,"稟議書",sysdate(),"稟議内容です",100,4
 
 承認テーブル
 create table approval(
-	approval_id integer(10) primay key auto_increment,
+	approval_id integer(10) primary key auto_increment,
 	user_id integer,
 	foreign key (user_id)
 	references user(user_id),
@@ -119,7 +126,8 @@ create table approval(
 	result integer(2),
 	document_id integer,
 	foreign key (document_id)
-	references Approval_document(document_id)
+	references Approval_document(document_id),
+	UNIQUE (user_id,document_id)
 	);
 	
 ・承認テーブルinsert文

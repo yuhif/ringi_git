@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/style.css">
+    <title>アカウント管理画面</title>
+
+</head>
+<body>
+    <form action=""></form>
+    検索<input type="search"  name="SeachWord" autofocus>
+    <a href="{{url_for('show_account')"><input type="submit" value="戻る"></a>
+
+    <table border="1">
+        <tr class="t1">
+            <td>氏名</td>
+            <td>役職</td>
+            <td>メールアドレス</td>
+            <td>上司のメールアドレス</td>
+        </tr>
+        <form action="{{url_for('')}}" method="post">
+        {% for list in result %}
+        <tr>
+            <td>{{% list[2] %}}</td>
+            {% if list[5] ==  %}
+            <td></td>
+            
+            <td>{{% %}}</td>
+            <td>{{% %}}</td> 
+        </tr><br>
+
+        </form>
+        <!-- <tr>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="email"></td>
+            <td><input type="email"></td>   
+        </tr><br>
+        <tr>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="email"></td>
+            <td><input type="email"></td>   
+        </tr><br>
+        <tr>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="email"></td>
+            <td><input type="email"></td>   
+        </tr><br>
+        <tr>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="email"></td>
+            <td><input type="email"></td>   
+        </tr><br>
+        <tr>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="email"></td>
+            <td><input type="email"></td>   
+        </tr><br>
+        <tr>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="email"></td>
+            <td><input type="email"></td>   
+        </tr><br>
+        <tr>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="email"></td>
+            <td><input type="email"></td>   
+        </tr><br> -->
+    </table>
+    <input type="reset" value="削除" class="button">
+</body>
+</html>

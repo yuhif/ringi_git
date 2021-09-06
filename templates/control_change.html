@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="con">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet"  href="../static/cont.css">
+        <title>アカウント管理画面</title>
+    </head>
+    <body>
+        <h3>アカウント管理画面</h3><br>
+        <form action="{{url_for('show_update_account')}}" method="get">
+            <p class="searchtext">検索<input class="input" type="text" name="name"><input type="submit" class="search" value="検索"></p>
+        </form>
+        <a href="{{url_for('show_account')}}" class="btn">戻る</a>
+        <table>
+            <tr>
+                <th>氏名</th>
+                <th>役職</th>
+                <th>メールアドレス</th>
+                <th>上司のメールアドレス</th>
+            </tr>
+            {% for list in result %}
+            <tr>
+                <td>{{list[2]}}</td>
+                {% if list[5] == 1 %}
+                <td>社長</td>
+                {% elif list[5] == 2 %}
+                <td>常務取締役</td>
+                {% elif list[5] == 3 %}
+                <td>部長</td>
+                {% elif list[5] == 4 %}
+                <td>主任</td>
+                {% else %}
+                <td>一般社員</td>
+                {% endif %}
+                <td>{{list[1]}}</td>
+                <td>{{list[6]}}</td>
+                <td><form action="{{url_for('update_account')}}" method="post">
+                    <input type="submit" value="変更"> <input type="hidden" name="mail" value="{{list[1]}}">
+                    <input type="hidden" name="name" value="{{list[2]}}">
+                    <input type="hidden" name="position" value="{{list[5]}}">
+                    <input type="hidden" name="superior_mail" value="{{list[6]}}">
+                    <input type="hidden" name="department" value="{{list[4]}}">
+                    <input type="hidden" name="id" value="{{list[0]}}">
+                </form></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
