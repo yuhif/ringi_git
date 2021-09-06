@@ -246,9 +246,8 @@ def update_document(doc_id, doc_name, contents, quaritity, price, total_payment,
         print("SQLの実行に失敗", e)
         return "failure"
 
-def application(superior_id, document_id, flag):  # 申請処理
-    if flag != 1:
-        search_app_date(document_id)
+def application(superior_id, document_id):  # 申請処理    
+    search_app_date(document_id)
     conn = get_connection()
     cur = conn.cursor()
     sql = "INSERT into approval(user_id,document_id) value(%s,%s);"    # approvalテーブルにインサートするsql
